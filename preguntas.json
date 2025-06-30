@@ -1,0 +1,540 @@
+{
+  "Cinemática": [
+  {
+  "pregunta": "¿Qué magnitud se representa con m/s²?",
+  "opciones": ["Velocidad", "Aceleración", "Tiempo", "Distancia"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Cuál es la fórmula para la velocidad media?",
+  "opciones": ["v = Δx/Δt", "v = at", "v = t/d", "v = d*a"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué representa el área bajo una gráfica velocidad-tiempo?",
+  "opciones": ["Aceleración", "Desplazamiento", "Tiempo total", "Velocidad final"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué unidad se utiliza para medir la velocidad?",
+  "opciones": ["m/s", "kg", "s", "N"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué magnitud cambia en un movimiento rectilíneo uniformemente acelerado?",
+  "opciones": ["Tiempo", "Velocidad", "Distancia", "Masa"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué representa la pendiente de una gráfica posición-tiempo?",
+  "opciones": ["Velocidad", "Aceleración", "Fuerza", "Distancia"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué tipo de movimiento tiene rapidez variable?",
+  "opciones": ["Movimiento rectilíneo uniforme", "Movimiento circular uniforme", "Movimiento parabólico"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Cuál es la expresión para hallar la aceleración media?",
+  "opciones": ["a = Δv/Δt", "a = v/t", "a = d/t²", "a = v²/r"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "Si un objeto acelera negativamente, esto significa que:",
+  "opciones": ["Aumenta su velocidad", "Se mueve en línea recta", "Disminuye su velocidad", "Cambia su masa"],
+  "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué representa una línea horizontal en una gráfica de velocidad contra tiempo?",
+    "opciones": [
+      "Movimiento rectlíneo con aceleración constante",
+      "Movimiento rectilíneo con velocidad constante",
+      "Reposo",
+      "Movimiento circular uniformemente acelerado"
+    ],
+    "correcta": 1
+  }
+  ,
+  {
+  "pregunta": "¿Qué fórmula permite calcular la distancia en MRUA?",
+  "opciones": ["d = v*t", "d = v₀*t + ½*a*t²", "d = a*t²", "d = v² - v₀²/2a"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué sucede con la velocidad en un MRU?",
+  "opciones": ["Aumenta", "Disminuye", "Permanece constante", "Es cero"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Qué representa una pendiente negativa en una gráfica velocidad-tiempo?",
+  "opciones": ["Aceleración positiva", "Desaceleración", "Movimiento uniforme", "Reposo"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué indica una aceleración de 0 m/s²?",
+  "opciones": ["Cambio de dirección", "Movimiento circular", "Velocidad constante", "Reposo"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "En una caída libre, ¿cuál es el valor aproximado de la magnitud de aceleración en la Tierra?",
+  "opciones": ["10 m/s²", "5 m/s²", "1 m/s²", "20 m/s²"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué magnitud no cambia en un MRU ?",
+  "opciones": ["Velocidad", "Aceleración", "Posición", "Tiempo"],
+  "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué representa la suma de los valores absolutos del área bajo una gráfica de velocidad contra tiempo?",
+    "opciones": ["Tiempo", "Cambio de velocidad", "Distancia total recorrida", "Desplazamiento"],
+    "correcta": 2
+  },
+  {
+  "pregunta": "¿Cuál es la fórmula para el tiempo en MRUA?",
+  "opciones": ["t = (v - v₀)/a", "t = d/v", "t = a/v", "t = v₀/a"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué representa el área bajo una gráfica aceleración-tiempo?",
+  "opciones": ["Tiempo", "Cambio de Velocidad", "Distancia", "Desplazamiento"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Cuál es la unidad de aceleración?",
+  "opciones": ["m/s", "m/s²", "m", "s²"],
+  "correcta": 1
+  }
+  ],
+  "Vectores": [
+  {
+  "pregunta": "¿Qué operación entre vectores produce un escalar?",
+  "opciones": ["Suma", "Resta", "Producto punto", "Producto cruz"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Qué se necesita para definir completamente un vector?",
+  "opciones": ["Magnitud", "Dirección", "Magnitud y dirección"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Cuál es el resultado de sumar dos vectores opuestos de igual magnitud?",
+  "opciones": ["Un vector mayor", "Un escalar", "Cero", "Un vector perpendicular"],
+  "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué representa la magnitud de un vector en física?",
+    "opciones": [
+      "La longitud del vector o valor numérico de la cantidad física que representa",
+      "La dirección hacia donde apunta",
+      "El punto donde inicia el vector",
+      "El ángulo que forma con el eje x"
+    ],
+    "correcta": 0
+  },
+  {
+  "pregunta": "¿Cuál es el ángulo entre dos vectores ortogonales?",
+  "opciones": ["45°", "90°", "180°", "0°"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué representa el producto cruz de dos vectores?",
+  "opciones": ["Un escalar", "Un vector perpendicular", "Una matriz", "Un número negativo"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Cuál es la fórmula del producto punto?",
+  "opciones": ["|A||B|senθ", "|A||B|cosθ", "A·B = AB", "|A - B|"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Cómo se representa gráficamente un vector?",
+  "opciones": ["Como un número", "Como una línea curva", "Como una flecha", "Como un punto"],
+  "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué representa el ángulo θ que un vector forma con el eje x positivo, medido en sentido antihorario desde dicho eje?",
+    "opciones": [
+      "La magnitud del vector",
+      "La dirección del vector en el plano",
+      "La componente x del vector",
+      "La distancia desde el origen"
+    ],
+    "correcta": 1
+  },
+  {
+  "pregunta": "¿Cuál es el valor del producto punto de dos vectores perpendiculares?",
+  "opciones": ["Máximo", "Uno", "Cero", "Negativo"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Cómo se obtiene el vector resultante de dos vectores?",
+  "opciones": ["Restándolos", "Multiplicándolos", "Sumándolos", "Dividiéndolos"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Qué unidad tiene un vector fuerza?",
+  "opciones": ["kg", "m/s", "N", "J"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Qué se utiliza para descomponer un vector?",
+  "opciones": ["Sistema de ejes coordenados", "Ecuaciones cuadráticas", "Integrales", "Matrices"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué significa que dos vectores sean colineales?",
+  "opciones": ["Tienen diferente dirección", "Están en la misma línea", "Son perpendiculares", "Son iguales"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Cuál es la representación matemática de un vector?",
+  "opciones": ["Número escalar", "Matriz", "Par ordenado o tripleta", "Derivada"],
+  "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué unidades tiene un vector unitario?",
+    "opciones": [
+      "Las mismas unidades que el vector original",
+      "Unidades de longitud",
+      "No tiene unidades, es adimensional",
+      "Unidades de dirección"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué función trigonométrica se usa para calcular la componente de un vector en la dirección de la horizontal, si forma un ángulo θ con esa dirección?",
+    "opciones": ["Seno", "Coseno", "Tangente", "Cotangente"],
+    "correcta": 1
+  },
+  
+  {
+  "pregunta": "¿Qué representa un vector nulo?",
+  "opciones": ["Un vector sin dirección", "Un vector con direccin arbitraria", "Un vector cuya magnitud es cero"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Cómo afecta la multiplicación de un vector por un escalar negativo?",
+  "opciones": ["No cambia el vector", "Cambia su módulo", "Invierte su dirección", "Elimina el vector"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Qué propiedad caracteriza a un vector unitario?",
+  "opciones": ["Tiene dirección fija", "Su módulo es 1", "No cambia en el tiempo", "Es perpendicular a todos"],
+  "correcta": 1
+  }
+  ],
+  "Unidades": [
+  {
+  "pregunta": "¿Cuál es la unidad del tiempo en el SI?",
+  "opciones": ["Segundo", "Minuto", "Hora", "Día"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué unidad corresponde a la magnitud 'fuerza' en el SI?",
+  "opciones": ["Newton", "Pascal", "Joule", "Watt"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué representa un Julio?",
+  "opciones": ["Unidad de potencia", "Unidad de energía", "Unidad de presión", "Unidad de masa"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Cuál es la unidad de masa en el SI?",
+  "opciones": ["Gramo", "Libra", "Kilogramo", "Newton"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Qué unidad se usa para la presión?",
+  "opciones": ["Julio", "Newton", "Pascal", "vatio"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Qué representa el vatio?",
+  "opciones": ["Fuerza", "Trabajo", "Energía", "Potencia"],
+  "correcta": 3
+  },
+  {
+  "pregunta": "¿Qué unidad mide la carga eléctrica?",
+  "opciones": ["Voltio", "Culombio", "Amperio", "Ohmio"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Cuál es la unidad del campo eléctrico?",
+  "opciones": ["N/C", "Julio", "Ohmio", "Voltio"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué unidad corresponde a la intensidad de corriente?",
+  "opciones": ["Ohmio", "Voltio", "Amperio", "Faradio"],
+  "correcta": 2
+  },
+  {
+  "pregunta": "¿Cuál es la unidad del voltaje?",
+  "opciones": ["Voltio", "Amperio", "Vatio", "Ohmio"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué unidad corresponde a la resistencia eléctrica?",
+  "opciones": ["Voltio", "Ohmio", "Amperio", "Faradio"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué unidad se utiliza para medir la energía térmica?",
+  "opciones": ["Caloría", "Voltio", "Culombio", "Vatio"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué representa un Newton?",
+  "opciones": ["Trabajo", "Fuerza", "Presión", "Potencia"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué unidad corresponde a la frecuencia?",
+  "opciones": ["Hz", "N", "W", "J"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué unidad representa el flujo magnético?",
+  "opciones": ["Tesla", "Weber", "Henry", "Faradio"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué mide un Tesla?",
+  "opciones": ["Fuerza", "Campo magnético", "Energía", "Resistencia"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué representa un Faradio?",
+  "opciones": ["Inductancia", "Capacitancia", "Resistencia", "Energía"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué unidad corresponde a la inductancia?",
+  "opciones": ["Ohmio", "Henrio", "Tesla", "Julio"],
+  "correcta": 1
+  },
+  {
+  "pregunta": "¿Qué representa un lux?",
+  "opciones": ["Iluminancia", "Flujo luminoso", "Temperatura", "Presión"],
+  "correcta": 0
+  },
+  {
+  "pregunta": "¿Qué unidad corresponde a la temperatura en el SI?",
+  "opciones": ["Celsius", "Fahrenheit", "Kelvin", "Rankine"],
+  "correcta": 2
+  }
+  ],
+  
+  "AnalisisDimensional": [
+  {
+      "pregunta": "¿Cuál es la dimensión del trabajo en el Sistema Internacional de Unidades (SI)?",
+      "opciones": [
+        "[M][L]²/[T]²",
+        "[M][L]/[T]²",
+        "[M][L]²/[T]",
+        "[L]²/[T]²"
+      ],
+      "correcta": 0
+    },
+    
+        {
+          "pregunta": "¿Cuál es la dimensión de la energía cinética?",
+          "opciones": [
+            "[M][L]²/[T]²",
+            "[M]/[L][T]²",
+            "[M][L]³/[T]²",
+            "[L]²/[T]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué dimensión tiene una constante de proporcionalidad en una ley de tipo F = kx?",
+          "opciones": [
+            "[M]/[T]²",
+            "[M][L]/[T]²",
+            "[M]/[T]",
+            "[M]/[L][T]²"
+          ],
+          "correcta": 3
+        },
+        {
+          "pregunta": "¿Cuál es la dimensión de la presión?",
+          "opciones": [
+            "[M]/[L][T]²",
+            "[M][L]/[T]²",
+            "[M][L]²/[T]²",
+            "[L]²/[T]²"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Cuál es la dimensión de la velocidad?",
+          "opciones": [
+            "[L]/[T]",
+            "[M]/[T]",
+            "[L]/[T]²",
+            "[L]²/[T]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué dimensión tiene la constante G en la ley de gravitación F = G·(m₁·m₂)/r²?",
+          "opciones": [
+            "[M]⁻¹[L]³/[T]²",
+            "[M][L]²/[T]²",
+            "[M][L]/[T]²",
+            "[M]⁻²[L]²/[T]²"
+          ],
+          "correcta": 0
+        },
+        
+        {
+          "pregunta": "¿Qué dimensión tiene el momento lineal (cantidad de movimiento)?",
+          "opciones": [
+            "[M][L]/[T]",
+            "[M][L]²/[T]",
+            "[M]/[T]²",
+            "[L]²/[T]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué dimensión tiene la aceleración?",
+          "opciones": [
+            "[L]/[T]²",
+            "[M]/[T]²",
+            "[L]²/[T]",
+            "[M][L]/[T]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Cuál es la dimensión del impulso?",
+          "opciones": [
+            "[M][L]/[T]",
+            "[M][L]²/[T]²",
+            "[L]/[T]",
+            "[M]/[T]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Cuál es la dimensión de una constante en la ecuación de período de un péndulo T = 2π√(L/g) ?",
+          "opciones": [
+            "Adimensional",
+            "[T]²",
+            "[L]/[T]²",
+            "[M]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué dimensión tiene el campo eléctrico (E = F/q)?",
+          "opciones": [
+            "[M][L]/[T]²[Q]",
+            "[M]/[T]²",
+            "[L]/[T][Q]",
+            "[M][L]²/[T]²"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué dimensión tiene la constante de Planck h si E = hf ?",
+          "opciones": [
+            "[M][L]²/[T]",
+            "[M][L]²/[T]²",
+            "[M][L]/[T]²",
+            "[M]/[T]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué representa dimensionalmente una cantidad con dimensiones [M][L]²/[T]³?",
+          "opciones": [
+            "Potencia",
+            "Fuerza",
+            "Energía",
+            "Impulso"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué cantidad tiene dimensiones [M]/[L][T]²?",
+          "opciones": [
+            "Presión",
+            "Densidad",
+            "Energía",
+            "Potencia"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Cuál es la dimensión del coeficiente de fricción?",
+          "opciones": [
+            "Adimensional",
+            "[M]/[T]",
+            "[L]/[T]²",
+            "[M][L]/[T]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué dimensión tiene la constante de elasticidad en Hooke (F = kx)?",
+          "opciones": [
+            "[M]/[T]²",
+            "[M]/[L][T]²",
+            "[M][L]²/[T]²",
+            "[L]²/[T]²"
+          ],
+          "correcta": 1
+        },
+        {
+          "pregunta": "¿Qué dimensión tiene la densidad?",
+          "opciones": [
+            "[M]/[L]³",
+            "[M]/[T]²",
+            "[L]³/[M]",
+            "[M][T]²/[L]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué cantidad tiene dimensiones [L]²/[T]?",
+          "opciones": [
+            "Difusividad",
+            "Velocidad",
+            "Energía",
+            "Trabajo"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué dimensión tiene la viscosidad dinámica?",
+          "opciones": [
+            "[M]/[L][T]",
+            "[M][L]/[T]²",
+            "[M]/[T]",
+            "[L]²/[T]"
+          ],
+          "correcta": 0
+        },
+        {
+          "pregunta": "¿Qué representa una cantidad con dimensión [M][L]²/[T]?",
+          "opciones": [
+            "Acción",
+            "Energía",
+            "Impulso",
+            "Potencia"
+          ],
+          "correcta": 0
+        }
+      ]
+}
+
+
+ 
+  
+  
