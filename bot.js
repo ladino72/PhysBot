@@ -1,25 +1,25 @@
-import { Telegraf } from 'telegraf';
-import dotenv from 'dotenv';
-
-dotenv.config();
+// Archivo: bot.js (usando CommonJS para compatibilidad)
+const { Telegraf } = require('telegraf');
+const express = require('express');
+require('dotenv').config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-// Respuesta al comando /start
-bot.start((ctx) => {
-  ctx.reply('✅ ¡Hola! Este es un bot básico con webhook funcionando en Railway.');
+// Ruta de Webhook (Telegram enviará actualizaciones aquí)
+const webhookPath = `/bot${process.env.BOT_TOKEN}`;
+
+// Configurar respuesta al comando /start
+bot.start((ctx) => ctx.reply('👋 ¡Hola! Este es un bot funcionando con Webhook en Railway.'));
+
+// Configurar Express para escuchar el webhook
+const app = express();
+app.use(express.json());
+app.use(bot.webhookCallback(webhookPath));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor escuchando en puerto ${PORT}`);
+
+  // Establecer Webhook (Telegram -> Railway)
+  bot.telegram.setWebhook(`${process.env.WEBHOOK_DOMAIN}${webhookPath}`);
 });
-
-// Activar Webhook
-bot.launch({
-  webhook: {
-    domain: process.env.WEBHOOK_DOMAIN,
-    port: parseInt(process.env.PORT) || 3000
-  }
-});
-
-console.log(`🚀 Bot escuchando en ${process.env.WEBHOOK_DOMAIN}/bot${process.env.BOT_TOKEN}`);
-
-// Detener el bot limpiamente en caso de señal
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
