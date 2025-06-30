@@ -1,25 +1,26 @@
-// Archivo: bot.js (usando CommonJS para compatibilidad)
-const { Telegraf } = require('telegraf');
-const express = require('express');
 require('dotenv').config();
+const TelegramBot = require('node-telegram-bot-api');
+const express = require('express');
 
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const token = process.env.BOT_TOKEN;
+const url = process.env.URL;
+const port = process.env.PORT || 3000;
 
-// Ruta de Webhook (Telegram enviará actualizaciones aquí)
-const webhookPath = `/bot${process.env.BOT_TOKEN}`;
+const bot = new TelegramBot(token);
+bot.setWebHook(`${url}/bot${token}`);
 
-// Configurar respuesta al comando /start
-bot.start((ctx) => ctx.reply('👋 ¡Hola! Este es un bot funcionando con Webhook en Railway.'));
-
-// Configurar Express para escuchar el webhook
 const app = express();
 app.use(express.json());
-app.use(bot.webhookCallback(webhookPath));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor escuchando en puerto ${PORT}`);
+app.post(`/bot${token}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
 
-  // Establecer Webhook (Telegram -> Railway)
-  bot.telegram.setWebhook(`${process.env.WEBHOOK_DOMAIN}${webhookPath}`);
+bot.onText(/\/start/, (msg) => {
+  bot.sendMessage(msg.chat.id, '✅ Bot en producción con webhook funcionando.');
+});
+
+app.listen(port, () => {
+  console.log(`🚀 Servidor escuchando en puerto ${port}`);
 });
