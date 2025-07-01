@@ -34,6 +34,8 @@ const RUTA_PUNTAJES = path.join(__dirname, 'puntajes.json');
 const RUTA_PREGUNTAS = path.join(__dirname, 'preguntas.json');
 const RUTA_HISTORIAL = path.join(__dirname, 'historial.json');
 const RUTA_ESTADO_CURSO = path.join(__dirname, 'estado_curso.json');
+const RUTA_ESTADO_USUARIOS = path.join(__dirname, 'estado_usuario.json');
+
 const temporizadoresActivos = {};
 
 function leerJSON(ruta) {
@@ -61,6 +63,14 @@ function cursoActivo() {
 
 function setCursoActivo(activo) {
   guardarJSON(RUTA_ESTADO_CURSO, { activo });
+}
+
+function leerEstadoUsuarios() {
+  return leerJSON(RUTA_ESTADO_USUARIOS);
+}
+
+function guardarEstadoUsuarios(estado) {
+  guardarJSON(RUTA_ESTADO_USUARIOS, estado);
 }
 
 function enviarConReintento(chatId, texto, opciones = {}) {
@@ -119,9 +129,15 @@ bot.onText(/\/desactivar/, (msg) => {
 bot.onText(/\/start/, (msg) => {
   enviarConReintento(
     msg.chat.id,
-    '👋 ¡Bienvenido a PhysicsBank! Usa /temas para elegir una temática, /ranking para ver el ranking o /minota para ver tu resultado.'
+    '👋 ¡Bienvenido a PhysicsBank!\n' +
+    '📚 Usa /temas para elegir una temática.\n' +
+    '📈 Usa /ranking para ver el ranking.\n' +
+    '📝 Usa /minota para ver tu resultado.\n' +
+    '⏸ Usa /pausar para detener temporalmente el quiz.\n' +
+    '▶️ Usa /reanudar para continuar con el quiz pausado.'
   );
 });
+
 
 bot.onText(/\/temas/, (msg) => {
   if (!cursoActivo()) return enviarConReintento(msg.chat.id, '⛔ El curso está desactivado.');
@@ -213,12 +229,19 @@ bot.on('callback_query', (cb) => {
 function enviarPregunta(userId) {
   const estado = estadoTrivia[userId];
   if (!estado || estado.index >= estado.preguntas.length) return finalizarQuiz(userId);
+
+  // Guardar estado persistente
+  const estados = leerEstadoUsuarios();
+  estados[userId] = estado;
+  guardarEstadoUsuarios(estados);
+
   const p = estado.preguntas[estado.index];
   const opciones = p.opciones.map((op, i) => [{ text: op, callback_data: `r:${estado.index}:${i}` }]);
   bot.sendMessage(userId, `⏳ 30 segundos...\n\n❓ ${p.pregunta}`, {
     reply_markup: { inline_keyboard: opciones }
   }).then(msg => iniciarCuentaRegresiva(userId, msg.message_id, p.pregunta, opciones));
 }
+
 
 function iniciarCuentaRegresiva(userId, messageId, texto, opciones) {
   // Si ya hay un temporizador activo, lo limpiamos
@@ -308,4 +331,38 @@ bot.onText(/\/activos/, (msg) => {
   }
   resumen += `\n📝 Lista:\n${lista}`;
   enviarConReintento(msg.chat.id, resumen);
+});
+
+bot.onText(/\/pausar/, (msg) => {
+  const userId = msg.chat.id;
+  const estado = estadoTrivia[userId];
+  if (!estado) return enviarConReintento(userId, '❌ No tienes un quiz en progreso.');
+
+  // Guardar estado y limpiar
+  const estados = leerEstadoUsuarios();
+  estados[userId] = estado;
+  guardarEstadoUsuarios(estados);
+
+  delete estadoTrivia[userId];
+  usuariosActivos.delete(userId);
+
+  if (temporizadoresActivos[userId]) {
+    clearInterval(temporizadoresActivos[userId]);
+    delete temporizadoresActivos[userId];
+  }
+
+  enviarConReintento(userId, '⏸ Quiz pausado. Puedes retomarlo luego con /reanudar.');
+});
+
+bot.onText(/\/reanudar/, (msg) => {
+  const userId = msg.chat.id;
+  const estados = leerEstadoUsuarios();
+  const estado = estados[userId];
+  if (!estado) return enviarConReintento(userId, '❌ No tienes un quiz pausado.');
+
+  estadoTrivia[userId] = estado;
+  usuariosActivos.set(userId, true);
+  registrarHistorial(userId, estado.nombre, `Reanudó quiz de ${estado.tema}`);
+  enviarConReintento(userId, `▶️ Continuando quiz de ${estado.tema}...`);
+  enviarPregunta(userId);
 });
