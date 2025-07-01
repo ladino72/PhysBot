@@ -240,9 +240,14 @@ bot.on('callback_query', (cb) => {
     // Verifica si ya fue finalizado
     const puntajes = leerJSON(RUTA_PUNTAJES);
     const nota = puntajes[userId] && puntajes[userId][tema];
-    if (nota) {
+
+    // Verificamos si ya se completaron todas las preguntas
+    const yaFinalizado = nota && nota.total === estado.preguntas.length && estado.index >= estado.preguntas.length;
+
+    if (yaFinalizado) {
       return enviarConReintento(userId, `✅ Ya completaste el quiz de *${tema}*. Usa /minota para ver tu resultado.`, { parse_mode: 'Markdown' });
     }
+
 
     estadoTrivia[userId] = estado;
     usuariosActivos.set(userId, true);
