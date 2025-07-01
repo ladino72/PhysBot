@@ -420,26 +420,3 @@ bot.onText(/\/reanudar/, (msg) => {
   });
 });
 
-if (data.startsWith('reanudar:')) {
-  const tema = data.split(':')[1];
-  const estados = leerEstadoUsuarios();
-  const estado = estados[userId];
-
-  if (!estado || estado.tema !== tema) {
-    return enviarConReintento(userId, `❌ No tienes un quiz pausado en ${tema}.`);
-  }
-
-  // Verifica si ya fue finalizado
-  const puntajes = leerJSON(RUTA_PUNTAJES);
-  const nota = puntajes[userId] && puntajes[userId][tema];
-  if (nota) {
-    return enviarConReintento(userId, `✅ Ya completaste el quiz de *${tema}*. Usa /minota para ver tu resultado.`, { parse_mode: 'Markdown' });
-  }
-
-  estadoTrivia[userId] = estado;
-  usuariosActivos.set(userId, true);
-  registrarHistorial(userId, estado.nombre, `Reanudó quiz de ${tema}`);
-  enviarConReintento(userId, `▶️ Continuando quiz de ${tema}...`);
-  enviarPregunta(userId);
-  bot.answerCallbackQuery(cb.id);
-}
