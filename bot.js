@@ -206,7 +206,10 @@ bot.on('callback_query', (cb) => {
     const puntajes = leerJSON(RUTA_PUNTAJES);
     const filtrados = Object.values(puntajes).flatMap(u => u[tema] ? [{ nombre: u[tema].nombre, puntaje: u[tema].puntaje }] : []);
     if (filtrados.length === 0) return enviarConReintento(userId, `❌ Sin registros para ${tema}`);
-    const lista = filtrados.sort((a, b) => b.puntaje - a.puntaje).map((p, i) => `${i + 1}. ${p.nombre}: ${p.puntaje}`).join('\n');
+    const lista = filtrados
+      .sort((a, b) => b.puntaje - a.puntaje)
+      .map((p, i) => `${i + 1}. ${p.nombre}: ${p.puntaje}`)
+      .join('\n');
     enviarConReintento(userId, `🏆 Ranking de *${tema}*:\n\n${lista}`, { parse_mode: 'Markdown' });
     bot.answerCallbackQuery(cb.id);
   }
@@ -217,16 +220,39 @@ bot.on('callback_query', (cb) => {
     const p = puntajes[userId] && puntajes[userId][tema];
     if (!p) return enviarConReintento(userId, `❌ No tienes nota registrada para ${tema}.`);
     const porcentaje = Math.round((p.puntaje / p.total) * 100);
-    let mensaje = `📊 Tu resultado en ${tema}:
-- Correctas: ${p.puntaje}/${p.total}
-- Aciertos: ${porcentaje}%`;
+    let mensaje = `📊 Tu resultado en ${tema}:\n- Correctas: ${p.puntaje}/${p.total}\n- Aciertos: ${porcentaje}%`;
     if (porcentaje === 100) mensaje += `\n🌟 ¡Excelente!`;
     else if (porcentaje >= 70) mensaje += `\n👍 Buen trabajo.`;
     else mensaje += `\n⚠️ Puedes mejorar.`;
     enviarConReintento(userId, mensaje);
     bot.answerCallbackQuery(cb.id);
   }
+
+  if (data.startsWith('reanudar:')) {
+    const tema = data.split(':')[1];
+    const estados = leerEstadoUsuarios();
+    const estado = estados[userId];
+
+    if (!estado || estado.tema !== tema) {
+      return enviarConReintento(userId, `❌ No tienes un quiz pausado en ${tema}.`);
+    }
+
+    // Verifica si ya fue finalizado
+    const puntajes = leerJSON(RUTA_PUNTAJES);
+    const nota = puntajes[userId] && puntajes[userId][tema];
+    if (nota) {
+      return enviarConReintento(userId, `✅ Ya completaste el quiz de *${tema}*. Usa /minota para ver tu resultado.`, { parse_mode: 'Markdown' });
+    }
+
+    estadoTrivia[userId] = estado;
+    usuariosActivos.set(userId, true);
+    registrarHistorial(userId, estado.nombre, `Reanudó quiz de ${tema}`);
+    enviarConReintento(userId, `▶️ Continuando quiz de ${tema}...`);
+    enviarPregunta(userId);
+    bot.answerCallbackQuery(cb.id);
+  }
 });
+
 
 function enviarPregunta(userId) {
   const estado = estadoTrivia[userId];
