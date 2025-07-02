@@ -169,6 +169,7 @@ bot.on('callback_query', (cb) => {
   const data = cb.data;
   const nombre = cb.from.first_name;
 
+  // Reanudar quiz desde botón
   if (data.startsWith('reanudar:')) {
     const tema = data.split(':')[1];
     const estados = leerEstadoUsuarios();
@@ -179,7 +180,6 @@ bot.on('callback_query', (cb) => {
     }
 
     const estado = pausados[tema];
-
     const puntajes = leerJSON(RUTA_PUNTAJES);
     const nota = puntajes[userId] && puntajes[userId][tema];
 
@@ -194,42 +194,72 @@ bot.on('callback_query', (cb) => {
     enviarPregunta(userId);
     bot.answerCallbackQuery(cb.id);
   }
+
+  // Iniciar quiz desde /temas
+  if (data.startsWith('tema:')) {
+    const tema = data.split(':')[1];
+    if (!bancoTemas[tema]) return enviarConReintento(userId, '❌ Temática inválida.');
+    if (usuariosActivos.size >= LIMITE_USUARIOS_CONCURRENTES) return enviarConReintento(userId, '🚫 Límite de usuarios alcanzado.');
+
+    const preguntas = mezclarPreguntas(bancoTemas[tema]);
+    estadoTrivia[userId] = { nombre, index: 0, puntaje: 0, preguntas, tema };
+    usuariosActivos.set(userId, true);
+    registrarHistorial(userId, nombre, `Inició quiz de ${tema}`);
+    enviarPregunta(userId);
+    bot.answerCallbackQuery(cb.id);
+  }
+
+  // Responder pregunta
+  if (data.startsWith('r:')) {
+    const [, idx, sel] = data.split(':').map(Number);
+    const estado = estadoTrivia[userId];
+    if (!estado || idx !== estado.index) return;
+
+    const pregunta = estado.preguntas[idx];
+    const correcta = pregunta.correcta;
+    if (sel === correcta) {
+      bot.sendMessage(userId, '✅ ¡Correcto!');
+      estado.puntaje++;
+    } else {
+      bot.sendMessage(userId, `❌ Incorrecto. Respuesta: ${pregunta.opciones[correcta]}`);
+    }
+
+    estado.index++;
+    enviarPregunta(userId);
+    bot.answerCallbackQuery(cb.id);
+  }
+
+  // Mostrar ranking por tema
+  if (data.startsWith('ranking:')) {
+    const tema = data.split(':')[1];
+    const puntajes = leerJSON(RUTA_PUNTAJES);
+    const filtrados = Object.values(puntajes)
+      .flatMap(u => u[tema] ? [{ nombre: u[tema].nombre, puntaje: u[tema].puntaje }] : []);
+    if (filtrados.length === 0) return enviarConReintento(userId, `❌ Sin registros para ${tema}`);
+    const lista = filtrados
+      .sort((a, b) => b.puntaje - a.puntaje)
+      .map((p, i) => `${i + 1}. ${p.nombre}: ${p.puntaje}`)
+      .join('\n');
+    enviarConReintento(userId, `🏆 Ranking de *${tema}*:\n\n${lista}`, { parse_mode: 'Markdown' });
+    bot.answerCallbackQuery(cb.id);
+  }
+
+  // Mostrar nota individual por tema
+  if (data.startsWith('minota:')) {
+    const tema = data.split(':')[1];
+    const puntajes = leerJSON(RUTA_PUNTAJES);
+    const p = puntajes[userId] && puntajes[userId][tema];
+    if (!p) return enviarConReintento(userId, `❌ No tienes nota registrada para ${tema}.`);
+    const porcentaje = Math.round((p.puntaje / p.total) * 100);
+    let mensaje = `📊 Tu resultado en ${tema}:\n- Correctas: ${p.puntaje}/${p.total}\n- Aciertos: ${porcentaje}%`;
+    if (porcentaje === 100) mensaje += `\n🌟 ¡Excelente!`;
+    else if (porcentaje >= 70) mensaje += `\n👍 Buen trabajo.`;
+    else mensaje += `\n⚠️ Puedes mejorar.`;
+    enviarConReintento(userId, mensaje);
+    bot.answerCallbackQuery(cb.id);
+  }
 });
 
-// 4. Limpieza automática al finalizar quiz
-function finalizarQuiz(userId) {
-  const estado = estadoTrivia[userId];
-  const puntajes = leerJSON(RUTA_PUNTAJES);
-  const userKey = String(userId);
-  if (!puntajes[userKey]) puntajes[userKey] = {};
-  puntajes[userKey][estado.tema] = {
-    nombre: estado.nombre,
-    puntaje: estado.puntaje,
-    total: estado.preguntas.length
-  };
-  guardarJSON(RUTA_PUNTAJES, puntajes);
-
-  // Eliminar estado pausado si existía
-  const estados = leerEstadoUsuarios();
-  if (estados[userId] && estados[userId][estado.tema]) {
-    delete estados[userId][estado.tema];
-    guardarEstadoUsuarios(estados);
-  }
-
-  const porcentaje = Math.round((estado.puntaje / estado.preguntas.length) * 100);
-  let mensaje = `🎉 Quiz finalizado: ${estado.tema}\n\n📊 Total: ${estado.preguntas.length}\n✅ Correctas: ${estado.puntaje}\n📈 Acierto: ${porcentaje}%`;
-  if (porcentaje === 100) mensaje += `\n🌟 ¡Excelente!`;
-  else if (porcentaje >= 70) mensaje += `\n👍 Buen trabajo.`;
-  else mensaje += `\n⚠️ Puedes mejorar.`;
-
-  enviarConReintento(userId, mensaje);
-  usuariosActivos.delete(userId);
-  delete estadoTrivia[userId];
-  if (temporizadoresActivos[userId]) {
-    clearInterval(temporizadoresActivos[userId]);
-    delete temporizadoresActivos[userId];
-  }
-}
   
 
 
