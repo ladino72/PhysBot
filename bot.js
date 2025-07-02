@@ -164,7 +164,18 @@ bot.onText(/\/minota/, (msg) => {
   });
 });
 
+// 3. Callback reanudar:<tema> y otros (ranking, minota...)
 bot.on('callback_query', (cb) => {
+  const userId = cb.message.chat.id;
+  const data = cb.data;
+  const nombre = cb.from.first_name;
+
+  // Manejo de selección de tema desde menú
+  if (data.startsWith('tema:')) {
+    const tema = data.split(':')[1];
+    iniciarQuiz(userId, nombre, tema);
+    return bot.answerCallbackQuery(cb.id);
+  }
   const userId = cb.message.chat.id;
   const data = cb.data;
   const nombre = cb.from.first_name;
