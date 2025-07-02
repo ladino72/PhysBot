@@ -456,7 +456,8 @@ bot.onText(/\/reanudar/, (msg) => {
   }
 
   const botones = temasPausados.map(tema => [{ text: tema, callback_data: `reanudar:${tema}` }]);
-  enviarConReintento(userId, '🔄 Tienes varios quizzes pausados. Elige uno para continuar:', {
+  eenviarConReintento(userId, '🔄 Tienes varios quizzes pausados. Elige uno para continuar:', {
     reply_markup: { inline_keyboard: botones }
   });
 });
+
