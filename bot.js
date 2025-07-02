@@ -358,40 +358,31 @@ bot.onText(/\/pausar/, (msg) => {
   enviarConReintento(userId, `⏸ Quiz *${estado.tema}* pausado. Puedes retomarlo con /reanudar.`, { parse_mode: 'Markdown' });
 });
 
-/*
-// 2. Comando /reanudar
 bot.onText(/\/reanudar/, (msg) => {
   const userId = msg.chat.id;
   const estados = leerEstadoUsuarios();
-  const pausados = estados[userId];
 
-  if (!pausados || Object.keys(pausados).length === 0) {
-    return enviarConReintento(userId, '❌ No tienes quizzes pausados.');
+  // El usuario no tiene nada guardado
+  if (!estados[userId]) {
+    return enviarConReintento(userId, '❌ No tienes ningún quiz pausado.');
   }
 
-  const temasPausados = Object.entries(pausados).filter(([tema, estado]) => {
-    const puntajes = leerJSON(RUTA_PUNTAJES);
-    const nota = puntajes[userId] && puntajes[userId][tema];
-    return estado.index < estado.preguntas.length && !nota;
-  });
-
-  if (temasPausados.length === 0) {
-    return enviarConReintento(userId, '✅ Ya finalizaste todos los quizzes que habías pausado.');
+  // Si hay múltiples quizzes guardados, ignoramos por ahora (lo manejamos después)
+  const temasPausados = Object.keys(estados[userId]);
+  if (temasPausados.length > 1) {
+    return enviarConReintento(userId, '⚠️ Tienes varios quizzes pausados. Esta versión solo permite reanudar uno. Pronto se habilitará el menú.');
   }
 
-  if (temasPausados.length === 1) {
-    const [tema, estado] = temasPausados[0];
-    estadoTrivia[userId] = estado;
-    usuariosActivos.set(userId, true);
-    registrarHistorial(userId, estado.nombre, `Reanudó quiz de ${tema}`);
-    enviarConReintento(userId, `▶️ Continuando quiz de ${tema}...`);
-    enviarPregunta(userId);
-    return;
+  const tema = temasPausados[0];
+  const estado = estados[userId][tema];
+
+  if (!estado || !estado.preguntas || estado.index >= estado.preguntas.length) {
+    return enviarConReintento(userId, `✅ Ya finalizaste el quiz de *${tema}*. Usa /minota para ver tu resultado.`, { parse_mode: 'Markdown' });
   }
 
-  const botones = temasPausados.map(([tema]) => ([{ text: tema, callback_data: `reanudar:${tema}` }]));
-  enviarConReintento(userId, '🔄 Tienes varios quizzes pausados. ¿Cuál deseas continuar?', {
-    reply_markup: { inline_keyboard: botones }
-  });
+  estadoTrivia[userId] = estado;
+  usuariosActivos.set(userId, true);
+  registrarHistorial(userId, estado.nombre, `Reanudó quiz de ${tema}`);
+  enviarConReintento(userId, `▶️ Continuando quiz de ${tema}...`);
+  enviarPregunta(userId);
 });
-*/
