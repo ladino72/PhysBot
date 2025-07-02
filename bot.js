@@ -380,7 +380,7 @@ bot.onText(/\/activos/, (msg) => {
   enviarConReintento(msg.chat.id, resumen);
 });
 
-/ Función que estaba faltando: iniciarQuiz
+// Función que estaba faltando: iniciarQuiz
 function iniciarQuiz(userId, nombre, tema) {
   const preguntasOriginales = bancoTemas[tema];
   if (!preguntasOriginales || preguntasOriginales.length === 0) {
