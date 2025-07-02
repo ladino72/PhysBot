@@ -169,33 +169,6 @@ bot.on('callback_query', (cb) => {
   const data = cb.data;
   const nombre = cb.from.first_name;
 
-  // Reanudar quiz desde botón
-  if (data.startsWith('reanudar:')) {
-    const tema = data.split(':')[1];
-    const estados = leerEstadoUsuarios();
-    const pausados = estados[userId];
-
-    if (!pausados || !pausados[tema]) {
-      return enviarConReintento(userId, `❌ No tienes un quiz pausado en *${tema}*.`, { parse_mode: 'Markdown' });
-    }
-
-    const estado = pausados[tema];
-    const puntajes = leerJSON(RUTA_PUNTAJES);
-    const nota = puntajes[userId] && puntajes[userId][tema];
-
-    if (estado.index >= estado.preguntas.length || (nota && nota.total === estado.preguntas.length)) {
-      return enviarConReintento(userId, `✅ Ya finalizaste el quiz de *${tema}*. Usa /minota para ver tu resultado.`, { parse_mode: 'Markdown' });
-    }
-
-    estadoTrivia[userId] = estado;
-    usuariosActivos.set(userId, true);
-    registrarHistorial(userId, estado.nombre, `Reanudó quiz de ${tema}`);
-    enviarConReintento(userId, `▶️ Continuando quiz de ${tema}...`);
-    enviarPregunta(userId);
-    bot.answerCallbackQuery(cb.id);
-  }
-
-  // Iniciar quiz desde /temas
   if (data.startsWith('tema:')) {
     const tema = data.split(':')[1];
     if (!bancoTemas[tema]) return enviarConReintento(userId, '❌ Temática inválida.');
@@ -209,7 +182,6 @@ bot.on('callback_query', (cb) => {
     bot.answerCallbackQuery(cb.id);
   }
 
-  // Responder pregunta
   if (data.startsWith('r:')) {
     const [, idx, sel] = data.split(':').map(Number);
     const estado = estadoTrivia[userId];
@@ -229,22 +201,16 @@ bot.on('callback_query', (cb) => {
     bot.answerCallbackQuery(cb.id);
   }
 
-  // Mostrar ranking por tema
   if (data.startsWith('ranking:')) {
     const tema = data.split(':')[1];
     const puntajes = leerJSON(RUTA_PUNTAJES);
-    const filtrados = Object.values(puntajes)
-      .flatMap(u => u[tema] ? [{ nombre: u[tema].nombre, puntaje: u[tema].puntaje }] : []);
+    const filtrados = Object.values(puntajes).flatMap(u => u[tema] ? [{ nombre: u[tema].nombre, puntaje: u[tema].puntaje }] : []);
     if (filtrados.length === 0) return enviarConReintento(userId, `❌ Sin registros para ${tema}`);
-    const lista = filtrados
-      .sort((a, b) => b.puntaje - a.puntaje)
-      .map((p, i) => `${i + 1}. ${p.nombre}: ${p.puntaje}`)
-      .join('\n');
+    const lista = filtrados.sort((a, b) => b.puntaje - a.puntaje).map((p, i) => `${i + 1}. ${p.nombre}: ${p.puntaje}`).join('\n');
     enviarConReintento(userId, `🏆 Ranking de *${tema}*:\n\n${lista}`, { parse_mode: 'Markdown' });
     bot.answerCallbackQuery(cb.id);
   }
 
-  // Mostrar nota individual por tema
   if (data.startsWith('minota:')) {
     const tema = data.split(':')[1];
     const puntajes = leerJSON(RUTA_PUNTAJES);
@@ -259,6 +225,7 @@ bot.on('callback_query', (cb) => {
     bot.answerCallbackQuery(cb.id);
   }
 });
+
 
   
 
@@ -391,6 +358,7 @@ bot.onText(/\/pausar/, (msg) => {
   enviarConReintento(userId, `⏸ Quiz *${estado.tema}* pausado. Puedes retomarlo con /reanudar.`, { parse_mode: 'Markdown' });
 });
 
+/*
 // 2. Comando /reanudar
 bot.onText(/\/reanudar/, (msg) => {
   const userId = msg.chat.id;
@@ -426,3 +394,4 @@ bot.onText(/\/reanudar/, (msg) => {
     reply_markup: { inline_keyboard: botones }
   });
 });
+*/
