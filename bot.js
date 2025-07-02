@@ -240,11 +240,9 @@ bot.on('callback_query', (cb) => {
     // Verifica si ya fue finalizado
     const puntajes = leerJSON(RUTA_PUNTAJES);
     const nota = puntajes[userId] && puntajes[userId][tema];
+    const quizIncompleto = estado.index < estado.preguntas.length;
 
-    // Verificamos si ya se completaron todas las preguntas
-    const yaFinalizado = nota && nota.total === estado.preguntas.length && estado.index >= estado.preguntas.length;
-
-    if (yaFinalizado) {
+    if (!quizIncompleto && nota) {
       return enviarConReintento(userId, `✅ Ya completaste el quiz de *${tema}*. Usa /minota para ver tu resultado.`, { parse_mode: 'Markdown' });
     }
 
@@ -406,9 +404,14 @@ bot.onText(/\/reanudar/, (msg) => {
     // Verifica si ya fue finalizado
     const puntajes = leerJSON(RUTA_PUNTAJES);
     const nota = puntajes[userId] && puntajes[userId][estado.tema];
-    if (nota) {
+    // Verifica si el estado está incompleto
+    const quizIncompleto = estado.index < estado.preguntas.length;
+
+    // Solo bloquear si no hay estado pendiente y hay nota registrada
+    if (!quizIncompleto && nota) {
       return enviarConReintento(userId, `✅ Ya finalizaste el quiz de *${estado.tema}*. Usa /minota para ver tu resultado.`, { parse_mode: 'Markdown' });
     }
+
 
     estadoTrivia[userId] = estado;
     usuariosActivos.set(userId, true);
