@@ -176,9 +176,6 @@ bot.on('callback_query', (cb) => {
     iniciarQuiz(userId, nombre, tema);
     return bot.answerCallbackQuery(cb.id);
   }
-  const userId = cb.message.chat.id;
-  const data = cb.data;
-  const nombre = cb.from.first_name;
 
   if (data.startsWith('reanudar:')) {
     const tema = data.split(':')[1];
