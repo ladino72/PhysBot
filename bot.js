@@ -380,6 +380,29 @@ bot.onText(/\/activos/, (msg) => {
   enviarConReintento(msg.chat.id, resumen);
 });
 
+/ Función que estaba faltando: iniciarQuiz
+function iniciarQuiz(userId, nombre, tema) {
+  const preguntasOriginales = bancoTemas[tema];
+  if (!preguntasOriginales || preguntasOriginales.length === 0) {
+    return enviarConReintento(userId, '⚠️ No hay preguntas disponibles para este tema.');
+  }
+
+  const preguntas = mezclarPreguntas(preguntasOriginales).slice(0, 20); // Limitar a 20
+  estadoTrivia[userId] = {
+    nombre,
+    tema,
+    preguntas,
+    index: 0,
+    puntaje: 0
+  };
+
+  usuariosActivos.set(userId, true);
+  registrarHistorial(userId, nombre, `Inició quiz de ${tema}`);
+  enviarConReintento(userId, `🧪 Iniciando quiz de *${tema}*...`, { parse_mode: 'Markdown' });
+  enviarPregunta(userId);
+}
+
+// 1. Comando /pausar
 bot.onText(/\/pausar/, (msg) => {
   const userId = msg.chat.id;
   const estado = estadoTrivia[userId];
