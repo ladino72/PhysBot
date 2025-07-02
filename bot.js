@@ -170,13 +170,14 @@ bot.on('callback_query', (cb) => {
   const data = cb.data;
   const nombre = cb.from.first_name;
 
-  // Manejo de selección de tema desde menú
+  // 1. Manejo de selección de tema
   if (data.startsWith('tema:')) {
     const tema = data.split(':')[1];
     iniciarQuiz(userId, nombre, tema);
     return bot.answerCallbackQuery(cb.id);
   }
 
+  // 2. Manejo de reanudar
   if (data.startsWith('reanudar:')) {
     const tema = data.split(':')[1];
     const estados = leerEstadoUsuarios();
@@ -200,6 +201,26 @@ bot.on('callback_query', (cb) => {
     return bot.answerCallbackQuery(cb.id);
   }
 
+  // 3. Manejo de respuesta del quiz
+  if (data.startsWith('r:')) {
+    const [, indexStr, opcionStr] = data.split(':');
+    const index = parseInt(indexStr);
+    const opcion = parseInt(opcionStr);
+    const estado = estadoTrivia[userId];
+
+    if (!estado || index !== estado.index) return bot.answerCallbackQuery(cb.id);
+
+    const correcta = estado.preguntas[index].respuesta;
+    const esCorrecta = (opcion === correcta);
+    if (esCorrecta) estado.puntaje++;
+
+    estado.index++;
+    bot.answerCallbackQuery(cb.id, { text: esCorrecta ? '✅ Correcto' : '❌ Incorrecto' });
+    enviarPregunta(userId);
+    return;
+  }
+
+  // 4. Ranking por tema
   if (data.startsWith('ranking:')) {
     const tema = data.split(':')[1];
     const puntajes = leerJSON(RUTA_PUNTAJES);
@@ -216,6 +237,7 @@ bot.on('callback_query', (cb) => {
     return enviarConReintento(userId, `🏆 Ranking - ${tema}\n\n${texto}`);
   }
 
+  // 5. Mostrar nota personal por tema
   if (data.startsWith('minota:')) {
     const tema = data.split(':')[1];
     const puntajes = leerJSON(RUTA_PUNTAJES);
@@ -234,6 +256,7 @@ bot.on('callback_query', (cb) => {
     return enviarConReintento(userId, mensaje);
   }
 });
+
 
 // 4. Limpieza automática al finalizar quiz
 function finalizarQuiz(userId) {
