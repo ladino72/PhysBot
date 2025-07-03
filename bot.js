@@ -125,8 +125,7 @@ bot.onText(/\/start/, (msg) => {
     '📚 Usa /temas para elegir una temática.\n' +
     '📈 Usa /ranking para ver el ranking.\n' +
     '📝 Usa /minota para ver tu resultado.\n' +
-    '⏸ Usa /pausar para detener temporalmente el quiz.\n' +
-    '▶️ Usa /reanudar para continuar con el quiz pausado.\n' +
+    '🛑 Usa /terminar para abandonar el quiz actual.\n' +
     '👥 Usa /activos para ver quiénes están resolviendo quizzes.'
   );
 });
@@ -316,4 +315,25 @@ bot.onText(/\/activos/, (msg) => {
   }
   resumen += `\n📝 Lista:\n${lista}`;
   enviarConReintento(msg.chat.id, resumen);
+});
+
+bot.onText(/\/terminar/, (msg) => {
+  const userId = msg.chat.id;
+  const estado = estadoTrivia[userId];
+
+  if (!estado) {
+    return enviarConReintento(userId, '⚠️ No estás presentando ningún quiz actualmente.');
+  }
+
+  // Detener temporizador si existe
+  if (temporizadoresActivos[userId]) {
+    clearInterval(temporizadoresActivos[userId]);
+    delete temporizadoresActivos[userId];
+  }
+
+  // Eliminar estado del quiz y remover de usuarios activos
+  delete estadoTrivia[userId];
+  usuariosActivos.delete(userId);
+
+  enviarConReintento(userId, '🛑 Has terminado voluntariamente tu quiz. Puedes volver a intentarlo desde /temas cuando lo desees.');
 });
