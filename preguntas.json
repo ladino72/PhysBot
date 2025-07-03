@@ -1,4 +1,112 @@
 {
+  "Ordenes de Magnitud": [
+  {
+    "pregunta": "¿Qué se entiende por 'orden de magnitud'?",
+    "opciones": [
+      "El número exacto de una medida",
+      "La unidad de medida utilizada",
+      "La potencia de 10 más cercana que representa el valor",
+      "La cantidad de cifras decimales de un número"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del tamaño de una célula animal típica?",
+    "opciones": ["10⁻¹ m", "10⁻⁴ m", "10⁻⁶ m", "10⁻⁹ m"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del diámetro de una bacteria?",
+    "opciones": ["10⁻³ m", "10⁻⁶ m", "10⁻⁹ m", "10⁻¹² m"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del tamaño de un virus típico?",
+    "opciones": ["10⁻⁶ m", "10⁻⁷ m", "10⁻⁸ m", "10⁻⁹ m"],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del tamaño de un átomo?",
+    "opciones": ["10⁻¹⁰ m", "10⁻⁶ m", "10⁻⁹ m", "10⁻⁴ m"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del radio de un protón?",
+    "opciones": ["10⁻⁹ m", "10⁻¹⁵ m", "10⁻¹⁸ m", "10⁻⁶ m"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud de la masa de un electrón en kilogramos?",
+    "opciones": ["10⁻²⁴ kg", "10⁻¹⁸ kg", "10⁻³¹ kg", "10⁻¹² kg"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del tamaño de una amígdala humana?",
+    "opciones": ["10⁻² m", "10⁻⁴ m", "10⁻¹ m", "10⁻³ m"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud de la altura de una persona promedio?",
+    "opciones": ["10⁰ m", "10¹ m", "10² m", "10⁻¹ m"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del diámetro de la Tierra?",
+    "opciones": ["10⁴ m", "10⁵ m", "10⁶ m", "10⁷ m"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud de la distancia entre la Tierra y el Sol?",
+    "opciones": ["10⁸ m", "10⁹ m", "10¹⁰ m", "10¹¹ m"],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del tiempo que tarda la luz en recorrer un metro?",
+    "opciones": ["10⁻⁹ s", "10⁻⁸ s", "10⁻⁶ s", "10⁻³ s"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del grosor de un cabello humano?",
+    "opciones": ["10⁻⁶ m", "10⁻⁵ m", "10⁻⁴ m", "10⁻⁷ m"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud de la masa de una célula humana?",
+    "opciones": ["10⁻⁹ kg", "10⁻¹² kg", "10⁻⁶ kg", "10⁻⁴ kg"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud de la carga del electrón en coulombs?",
+    "opciones": ["10⁻¹² C", "10⁻⁹ C", "10⁻¹⁶ C", "10⁻¹⁹ C"],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del tiempo de vida promedio de un muón?",
+    "opciones": ["10⁻⁶ s", "10⁻⁸ s", "10⁻³ s", "10⁻¹ s"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud del volumen de una gota de agua?",
+    "opciones": ["10⁻⁶ m³", "10⁻⁸ m³", "10⁻⁹ m³", "10⁻⁷ m³"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué orden de magnitud corresponde a un litro de agua en metros cúbicos?",
+    "opciones": ["10⁰ m³", "10⁻² m³", "10⁻³ m³", "10⁻⁶ m³"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué orden de magnitud tiene el espesor de una hoja de papel?",
+    "opciones": ["10⁻² m", "10⁻³ m", "10⁻⁴ m", "10⁻⁵ m"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el orden de magnitud de la masa de la Tierra?",
+    "opciones": ["10²⁴ kg", "10²¹ kg", "10¹⁸ kg", "10³⁰ kg"],
+    "correcta": 0
+  }
+],
+
   "Cinemática": [
   {
   "pregunta": "¿Qué magnitud se representa con m/s²?",
@@ -531,7 +639,1336 @@
           ],
           "correcta": 0
         }
-      ]
+      ],
+"Hidrostatica": [
+  {
+    "pregunta": "¿Qué estudia la hidrostática?",
+    "opciones": [
+      "El movimiento de los cuerpos sólidos",
+      "El comportamiento de los líquidos en reposo",
+      "La evaporación de líquidos",
+      "El flujo de líquidos a través de tubos"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué unidad se utiliza para medir la presión en el Sistema Internacional?",
+    "opciones": ["Bar", "atm", "Pascal (Pa)", "mmHg"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué magnitudes influyen en la presión ejercida por un líquido en reposo?",
+    "opciones": [
+      "La velocidad y el área",
+      "La densidad, la gravedad y la profundidad",
+      "El volumen y la masa",
+      "La viscosidad y la temperatura"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué expresa el principio de Pascal?",
+    "opciones": [
+      "La presión es igual a la densidad por la altura",
+      "Un líquido se mueve de zonas frías a calientes",
+      "Un cambio de presión en un fluido se transmite de forma uniforme a todos los puntos del fluido",
+      "La presión es inversamente proporcional al volumen"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre con la presión a medida que aumenta la profundidad en un líquido?",
+    "opciones": ["Disminuye", "Permanece constante", "Aumenta", "Se vuelve negativa"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué afirma el principio de Arquímedes?",
+    "opciones": [
+      "Los líquidos se calientan desde abajo",
+      "Un cuerpo flotante ejerce más presión",
+      "Todo cuerpo sumergido experimenta un empuje igual al peso del volumen del líquido desalojado",
+      "Los cuerpos sumergidos pierden masa"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué condición debe cumplirse para que un cuerpo flote en un líquido?",
+    "opciones": [
+      "Su densidad debe ser mayor que la del líquido",
+      "Su volumen debe ser mínimo",
+      "Debe estar completamente sumergido",
+      "Su densidad debe ser menor que la del líquido"
+    ],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Cuál es la expresión de la presión hidrostática en un punto a una profundidad h?",
+    "opciones": [
+      "P = mgh",
+      "P = ρgh",
+      "P = F/A",
+      "P = gh/ρ"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre si se aplica una presión extra sobre la superficie de un líquido confinado?",
+    "opciones": [
+      "Solo aumenta en la superficie",
+      "La presión disminuye",
+      "Se transmite sin cambio a todo el líquido",
+      "El líquido hierve"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué es el empuje hidrostático?",
+    "opciones": [
+      "La fuerza de fricción entre un líquido y un sólido",
+      "La fuerza que un líquido en movimiento ejerce sobre una superficie",
+      "La fuerza vertical ascendente que ejerce un líquido sobre un cuerpo sumergido",
+      "La fuerza del aire sobre el líquido"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre con el peso aparente de un objeto al sumergirse en agua?",
+    "opciones": [
+      "Aumenta",
+      "No cambia",
+      "Disminuye",
+      "Se vuelve cero inmediatamente"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué dispositivo aprovecha el principio de Pascal?",
+    "opciones": [
+      "El termómetro",
+      "El dinamómetro",
+      "La prensa hidráulica",
+      "El reloj de agua"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué sucede si se coloca un objeto de densidad igual a la del líquido?",
+    "opciones": [
+      "Se hunde completamente",
+      "Flota parcialmente",
+      "Flota en equilibrio sumergido",
+      "Sale expulsado del líquido"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el valor aproximado de la densidad del agua en kg/m³?",
+    "opciones": ["1", "100", "1000", "10,000"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué significa que la presión sea escalar?",
+    "opciones": [
+      "Tiene dirección y sentido",
+      "Es una cantidad negativa",
+      "No depende del punto de aplicación",
+      "No tiene dirección, solo magnitud"
+    ],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Qué provoca la diferencia de presión en los oídos al bucear?",
+    "opciones": [
+      "Cambio de densidad del agua",
+      "Cambio de temperatura",
+      "Aumento de presión con la profundidad",
+      "Empuje hacia arriba"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre si un objeto se hunde completamente y no toca el fondo?",
+    "opciones": [
+      "No hay empuje",
+      "El empuje es menor al peso",
+      "El empuje es igual al peso",
+      "El empuje es mayor que el peso"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué tipo de presión mide un manómetro abierto?",
+    "opciones": [
+      "Presión atmosférica",
+      "Presión absoluta",
+      "Presión manométrica",
+      "Presión de vapor"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué presión se considera a nivel del mar en condiciones normales?",
+    "opciones": ["760 mmHg", "1 atm", "101325 Pa", "Todas las anteriores"],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Cuál es la relación entre la presión y el área, según la fórmula P = F/A?",
+    "opciones": [
+      "Mayor área, mayor presión",
+      "Mayor área, menor presión",
+      "Presión no depende del área",
+      "Fuerza y área son inversamente proporcionales"
+    ],
+    "correcta": 1
+  }
+],
+"Leyes De Conservacion": [
+  {
+    "pregunta": "¿Qué establece la ley de conservación del momento lineal?",
+    "opciones": [
+      "El momento lineal cambia constantemente",
+      "El momento lineal se conserva si no hay fuerzas externas",
+      "El momento lineal solo depende de la masa",
+      "El momento lineal se conserva en todos los casos"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué magnitudes forman el momento lineal?",
+    "opciones": ["Fuerza y masa", "Masa y velocidad", "Velocidad y aceleración", "Fuerza y aceleración"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cuál es la unidad del momento lineal en el Sistema Internacional?",
+    "opciones": ["kg", "m/s", "kg·m/s", "N·s"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuándo se conserva la energía mecánica?",
+    "opciones": [
+      "Cuando actúan fuerzas de fricción",
+      "Cuando hay trabajo externo",
+      "Cuando solo actúan fuerzas conservativas",
+      "Cuando hay fuerzas impulsivas"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué forma parte de la energía mecánica?",
+    "opciones": [
+      "Energía cinética y calor",
+      "Energía cinética y potencial",
+      "Trabajo y temperatura",
+      "Energía térmica y potencial"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre con la energía en un sistema cerrado sin fricción?",
+    "opciones": [
+      "Se pierde gradualmente",
+      "Se conserva",
+      "Aumenta con el tiempo",
+      "Depende de la aceleración"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre cuando dos patinadores se empujan y se separan sobre hielo sin fricción?",
+    "opciones": [
+      "La energía se pierde",
+      "El momento total se conserva",
+      "Ambos se detienen",
+      "Uno gana momento, el otro no"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cuál es la expresión del momento lineal  p)?",
+    "opciones": ["p = m·a", "p = F·t", "p = m·v", "p = v/t"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué representa el momento angular?",
+    "opciones": [
+      "La velocidad de una partícula",
+      "La energía total en rotación",
+      "La cantidad de movimiento en rotación",
+      "La aceleración de una partícula girando"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué condición garantiza la conservación del momento angular?",
+    "opciones": [
+      "Que la masa no cambie",
+      "Que no haya torque externo",
+      "Que el objeto esté en equilibrio",
+      "Que la velocidad sea constante"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué sucede con el momento angular cuando un patinador recoge los brazos al girar?",
+    "opciones": [
+      "Disminuye su momento angular",
+      "Aumenta su velocidad angular",
+      "Disminuye su energía",
+      "Pierde masa"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre con el momento lineal en una colisión elástica entre dos objetos en una superficie sin fricción?",
+    "opciones": [
+      "Aumenta",
+      "Disminuye",
+      "Se conserva",
+      "Se transfiere completamente"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál de las siguientes situaciones representa mejor la conservación de energía mecánica?",
+    "opciones": [
+      "Una pelota cayendo en el vacío",
+      "Un automóvil frenando",
+      "Un péndulo en movimiento con fricción",
+      "Un objeto sobre una superficie rugosa"
+    ],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué tipo de colisión conserva tanto energía cinética como momento lineal?",
+    "opciones": ["Inelástica", "Perfectamente inelástica", "Elástica", "Explosiva"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué implica que una cantidad física esté 'conservada'?",
+    "opciones": [
+      "Que su valor cambia con el tiempo",
+      "Que puede transformarse en otras formas",
+      "Que su valor total permanece constante en el sistema",
+      "Que es igual a cero"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué tipo de fuerza NO conserva la energía mecánica?",
+    "opciones": ["Gravitacional", "Elástica", "Fricción", "Electrostática"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "En ausencia de fuerzas externas, ¿qué se conserva en un sistema de dos cuerpos que interactúan?",
+    "opciones": ["El impulso total", "La velocidad", "La masa", "La aceleración"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué sucede con la energía mecánica cuando un bloque cae por un plano sin fricción?",
+    "opciones": [
+      "Se transforma de cinética a potencial",
+      "Se conserva, transformándose entre potencial y cinética",
+      "Se pierde completamente",
+      "Aumenta indefinidamente"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cuál de las siguientes opciones representa mejor una situación donde se conserva el momento angular?",
+    "opciones": [
+      "Una pelota rebotando en el suelo",
+      "Un trompo girando sin rozamiento",
+      "Un coche frenando",
+      "Una persona empujando una caja"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué condición se necesita para que una colisión sea perfectamente elástica?",
+    "opciones": [
+      "Que los objetos queden pegados",
+      "Que la energía cinética total se conserve",
+      "Que uno de los objetos esté en reposo",
+      "Que haya fuerzas internas"
+    ],
+    "correcta": 1
+  }
+],
+"DinamicaCuerpoRigido": [
+  {
+    "pregunta": "¿Qué es un cuerpo rígido en física?",
+    "opciones": [
+      "Un objeto que no se mueve",
+      "Un objeto que puede cambiar de forma",
+      "Un objeto ideal que no se deforma al aplicar fuerzas",
+      "Un objeto de masa variable"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué magnitud describe la rotación de un cuerpo rígido?",
+    "opciones": ["Velocidad lineal", "Aceleración lineal", "Velocidad angular", "Energía cinética"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué unidad tiene la velocidad angular en el Sistema Internacional?",
+    "opciones": ["rad/s", "m/s", "kg·m/s", "N·m"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué es el momento de inercia?",
+    "opciones": [
+      "La masa total del cuerpo",
+      "La resistencia de un cuerpo al movimiento lineal",
+      "La medida de la oposición de un cuerpo a cambiar su estado de rotación",
+      "La fuerza neta sobre el cuerpo"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es la expresión del momento de una fuerza (torque)?",
+    "opciones": ["M = F·d", "M = m·a", "M = r × F", "M = v/t"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué condición debe cumplirse para que un cuerpo esté en equilibrio rotacional?",
+    "opciones": [
+      "La fuerza neta debe ser cero",
+      "El torque neto debe ser cero",
+      "La aceleración angular debe ser máxima",
+      "El momento de inercia debe ser constante"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cuál es la ecuación análoga a la segunda ley de Newton para la rotación?",
+    "opciones": ["F = ma", "τ = Iα", "v = rω", "E = mc²"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué representa la letra α en dinámica rotacional?",
+    "opciones": [
+      "Momento angular",
+      "Aceleración angular",
+      "Ángulo de giro",
+      "Velocidad angular"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre con un cuerpo rígido si la fuerza neta es cero pero hay torque?",
+    "opciones": [
+      "Se traslada sin rotar",
+      "Rota sin trasladarse",
+      "No se mueve",
+      "Acelera en línea recta"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Dónde se encuentra el centro de masa de un cuerpo homogéneo en forma de barra?",
+    "opciones": [
+      "En un extremo",
+      "En el centro geométrico",
+      "Fuera del cuerpo",
+      "Donde se aplica la fuerza"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué tipo de energía tiene un disco que gira alrededor de su eje?",
+    "opciones": [
+      "Energía potencial",
+      "Energía cinética rotacional",
+      "Energía térmica",
+      "Energía cinética lineal únicamente"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué factores influyen en el momento de inercia de un cuerpo?",
+    "opciones": [
+      "Solo la masa",
+      "Solo la forma del cuerpo",
+      "Distribución de masa y distancia al eje de rotación",
+      "La fuerza aplicada"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué describe el momento angular?",
+    "opciones": [
+      "La tendencia de un objeto a rotar",
+      "La aceleración angular de un cuerpo",
+      "La fuerza de fricción sobre un cuerpo",
+      "La distancia entre dos puntos de apoyo"
+    ],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué condición garantiza equilibrio traslacional en un cuerpo rígido?",
+    "opciones": [
+      "Torque neto cero",
+      "Velocidad angular constante",
+      "Fuerza neta cero",
+      "Aceleración angular cero"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué sucede cuando un cuerpo rueda sin deslizar?",
+    "opciones": [
+      "Solo rota",
+      "Solo se traslada",
+      "Rota y se traslada simultáneamente",
+      "Se queda en reposo"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué relación existe entre velocidad lineal y angular en una rueda?",
+    "opciones": ["v = ω/r", "v = ω·r", "v = r²ω", "v = ω/r²"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué representa el producto I·ω?",
+    "opciones": [
+      "Velocidad tangencial",
+      "Fuerza centrípeta",
+      "Momento angular",
+      "Torque neto"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué significa que un objeto tenga gran momento de inercia?",
+    "opciones": [
+      "Se acelera fácilmente",
+      "Se resiste a rotar",
+      "Tiene poco peso",
+      "Es muy pequeño"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué representa el área bajo la curva torque-tiempo?",
+    "opciones": [
+      "La energía rotacional",
+      "El momento de inercia",
+      "El momento angular",
+      "El ángulo de giro"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué variable se conserva cuando no hay torque externo sobre un cuerpo que rota?",
+    "opciones": [
+      "La energía térmica",
+      "El momento angular",
+      "El torque interno",
+      "La aceleración angular"
+    ],
+    "correcta": 1
+  }
+],
+"FenomenosElectrostaticos": [
+  {
+    "pregunta": "¿Qué tipo de carga tienen los protones?",
+    "opciones": ["Negativa", "Neutra", "Positiva", "Variable"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre cuando se frotan dos materiales diferentes?",
+    "opciones": [
+      "Se genera calor únicamente",
+      "Se produce una corriente eléctrica",
+      "Se produce transferencia de electrones y electrización",
+      "No ocurre nada"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué tipo de fuerza es la fuerza electrostática?",
+    "opciones": [
+      "De contacto",
+      "Gravitacional",
+      "De fricción",
+      "A distancia (de acción a distancia)"
+    ],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Cuál es la unidad de carga eléctrica en el Sistema Internacional?",
+    "opciones": ["Volt", "Coulomb", "Ohm", "Ampere"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué dice la ley de Coulomb?",
+    "opciones": [
+      "La energía se conserva",
+      "La fuerza entre cargas es directamente proporcional al producto de las cargas e inversamente proporcional al cuadrado de la distancia entre ellas",
+      "La carga depende de la masa",
+      "La fuerza entre cargas es constante"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué significa que la carga esté cuantizada?",
+    "opciones": [
+      "La carga puede tener cualquier valor",
+      "La carga es continua",
+      "La carga siempre es un múltiplo de la carga del electrón",
+      "La carga se mide en gramos"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre entre dos cargas del mismo signo?",
+    "opciones": ["Se atraen", "No interactúan", "Se repelen", "Se anulan"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué es un conductor eléctrico?",
+    "opciones": [
+      "Un material que no permite el paso de carga",
+      "Un material que permite el paso libre de electrones",
+      "Un material que solo conduce calor",
+      "Un material con carga positiva fija"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué es la electrización por contacto?",
+    "opciones": [
+      "Una transferencia de masa",
+      "Una transferencia de carga por contacto físico",
+      "La pérdida de energía por fricción",
+      "La fusión de cargas"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué es la electrización por inducción?",
+    "opciones": [
+      "Una transferencia de calor",
+      "Una separación de cargas sin contacto físico directo",
+      "Una descarga eléctrica",
+      "La acumulación de protones"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre cuando una varilla cargada positivamente se acerca a un cuerpo neutro conductor?",
+    "opciones": [
+      "Nada cambia",
+      "El cuerpo conductor se carga positivamente",
+      "Los electrones del cuerpo se alejan",
+      "Los electrones del cuerpo se acercan hacia la varilla"
+    ],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Qué aparato se utiliza para detectar carga eléctrica?",
+    "opciones": ["Amperímetro", "Electroscopio", "Termómetro", "Multímetro"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué carga posee el electrón?",
+    "opciones": ["+1.6×10⁻¹⁹ C", "0", "−1.6×10⁻¹⁹ C", "1 C"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cómo se distribuye la carga en un conductor en equilibrio electrostático?",
+    "opciones": [
+      "Uniformemente en todo el volumen",
+      "Solo en el centro",
+      "En la superficie",
+      "No se distribuye"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué sucede con la fuerza electrostática si la distancia entre cargas se duplica?",
+    "opciones": [
+      "Se duplica",
+      "Se reduce a la mitad",
+      "Se cuadruplica",
+      "Se reduce a la cuarta parte"
+    ],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Qué partículas pueden moverse en un sólido conductor?",
+    "opciones": ["Protones", "Electrones", "Neutrones", "Átomos"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre cuando un objeto tiene igual número de protones y electrones?",
+    "opciones": ["Está cargado positivamente", "Está cargado negativamente", "Está neutro", "Tiene campo eléctrico"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el valor de la constante de Coulomb k?",
+    "opciones": ["9 × 10⁹ N·m²/C²", "6.67 × 10⁻¹¹ N·m²/kg²", "3 × 10⁸ m/s", "1.6 × 10⁻¹⁹ C"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué ocurre con la masa de un cuerpo cuando queda cargado negativamente?",
+    "opciones": [
+      "Su masa disminuye",
+      "Su masa aumenta",
+      "Su masa permanece exactamente igual",
+      "Pierde toda su masa"
+    ],
+    "correcta": 1
+  },
+  
+  {
+    "pregunta": "¿Qué ocurre con la masa de un cuerpo cuando queda cargado positivamente?",
+    "opciones": [
+      "Su masa aumenta",
+      "Su masa disminuye",
+      "Su masa no se ve afectada",
+      "Su masa se duplica"
+    ],
+    "correcta": 1
+  }
+  
+],
+"Campo Eléctrico": [
+  {
+    "pregunta": "¿Qué representa el campo eléctrico en física?",
+    "opciones": [
+      "La fuerza ejercida sobre un cuerpo por la gravedad",
+      "La velocidad de una carga en movimiento",
+      "La región del espacio donde una carga experimenta una fuerza eléctrica",
+      "La dirección del flujo de corriente"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es la unidad del campo eléctrico en el Sistema Internacional?",
+    "opciones": ["N", "C", "N/C", "V·m"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cómo se representa el campo eléctrico en una región del espacio?",
+    "opciones": [
+      "Mediante vectores",
+      "Mediante escalares",
+      "Con círculos concéntricos",
+      "Solo con colores"
+    ],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué ocurre con una carga positiva colocada en un campo eléctrico?",
+    "opciones": [
+      "Se mueve en dirección opuesta al campo",
+      "No experimenta fuerza",
+      "Se mueve en la dirección del campo",
+      "Gira en espiral"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué relación existe entre la fuerza eléctrica y el campo eléctrico?",
+    "opciones": [
+      "F = q·E",
+      "F = E/q",
+      "F = q/E",
+      "F = E·v"
+    ],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué dirección tienen las líneas de campo eléctrico de una carga negativa?",
+    "opciones": [
+      "Radialmente hacia afuera",
+      "Perpendiculares al plano",
+      "Radialmente hacia adentro",
+      "En espiral"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué indica la densidad de las líneas de campo eléctrico?",
+    "opciones": [
+      "La temperatura del sistema",
+      "La intensidad del campo eléctrico",
+      "La masa del objeto",
+      "El valor de la energía"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cuál es la fórmula del campo eléctrico debido a una carga puntual?",
+    "opciones": [
+      "E = q·r²",
+      "E = k·q/r²",
+      "E = k·r/q²",
+      "E = q/r"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre con el campo eléctrico si se duplica la distancia a la carga?",
+    "opciones": [
+      "Se duplica",
+      "Se reduce a la mitad",
+      "Se cuadruplica",
+      "Se reduce a la cuarta parte"
+    ],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Qué tipo de campo produce una distribución de carga uniforme sobre una placa plana?",
+    "opciones": [
+      "Campo radial",
+      "Campo variable",
+      "Campo eléctrico uniforme",
+      "Campo nulo"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es la unidad equivalente de N/C?",
+    "opciones": ["V/m", "C/m²", "Ω·m", "A·s"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué sucede con una carga negativa colocada en un campo eléctrico uniforme?",
+    "opciones": [
+      "Se mueve en la dirección del campo",
+      "Se queda en reposo",
+      "Se mueve en dirección opuesta al campo",
+      "Gira en círculos"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cómo se comportan las líneas de campo eléctrico entre dos placas paralelas cargadas?",
+    "opciones": [
+      "Son curvas divergentes",
+      "Son paralelas y equidistantes",
+      "Forman círculos",
+      "Apuntan en todas direcciones"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué punto se considera al calcular el campo eléctrico de una carga puntual?",
+    "opciones": [
+      "En el centro de la carga",
+      "En cualquier punto del espacio",
+      "En el punto donde se evalúa la fuerza sobre una carga de prueba",
+      "En el borde del conductor"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué dirección tiene el campo eléctrico de una carga positiva?",
+    "opciones": [
+      "Hacia la carga",
+      "Hacia afuera de la carga",
+      "No tiene dirección",
+      "En forma circular"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre si una carga entra perpendicularmente en un campo eléctrico uniforme?",
+    "opciones": [
+      "Se mueve en línea recta",
+      "Describe una parábola",
+      "Gira en espiral",
+      "No se mueve"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cómo se representa gráficamente un campo eléctrico más intenso?",
+    "opciones": [
+      "Con líneas más espaciadas",
+      "Con líneas más densas",
+      "Con líneas discontinuas",
+      "Con líneas circulares"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿En qué dirección actúa la fuerza eléctrica sobre una carga positiva?",
+    "opciones": [
+      "En dirección opuesta al campo",
+      "En dirección del campo",
+      "Perpendicular al campo",
+      "No actúa ninguna fuerza"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué propiedad permite distinguir un campo eléctrico de uno magnético?",
+    "opciones": [
+      "El campo eléctrico actúa sobre cargas en reposo",
+      "Ambos campos sólo actúan sobre cargas en movimiento",
+      "El campo eléctrico se mide en Tesla",
+      "El campo eléctrico no produce fuerza"
+    ],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué ocurre si el campo eléctrico en una región es cero?",
+    "opciones": [
+      "Toda carga se mueve con velocidad constante",
+      "Las cargas no experimentan fuerza eléctrica",
+      "No pueden existir cargas",
+      "La región está completamente cargada"
+    ],
+    "correcta": 1
+  }
+],
+"Campo Magnético": [
+  {
+    "pregunta": "¿Qué representa un campo magnético?",
+    "opciones": [
+      "Una región donde una carga en movimiento experimenta una fuerza",
+      "Una región donde hay solo temperatura",
+      "Una región sin masa",
+      "Una fuerza gravitacional"
+    ],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué unidad se utiliza para el campo magnético en el SI?",
+    "opciones": ["Newton", "Coulomb", "Tesla", "Faradio"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué forma tienen las líneas del campo magnético de un imán de barra?",
+    "opciones": [
+      "Líneas rectas entre polos",
+      "Líneas cerradas del norte al sur por fuera y del sur al norte por dentro",
+      "Líneas divergentes sin dirección",
+      "No existen líneas"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cómo se genera un campo magnético?",
+    "opciones": [
+      "Con una masa en movimiento",
+      "Con cargas eléctricas en reposo",
+      "Con cargas eléctricas en movimiento",
+      "Con temperatura elevada"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué regla se utiliza para encontrar la dirección del campo magnético alrededor de un cable?",
+    "opciones": [
+      "Regla de la mano izquierda",
+      "Regla de la mano derecha",
+      "Regla de los tres dedos",
+      "Regla de la brújula"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué dirección tiene la fuerza magnética sobre una carga positiva en movimiento?",
+    "opciones": [
+      "Paralela a la velocidad",
+      "Paralela al campo",
+      "Perpendicular a la velocidad y al campo",
+      "En sentido opuesto al campo"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre con una carga moviéndose paralela al campo magnético?",
+    "opciones": [
+      "Siente una fuerza máxima",
+      "Siente una fuerza nula",
+      "Gira en espiral",
+      "Se detiene"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué tipo de trayectoria sigue una carga que entra perpendicularmente en un campo magnético uniforme?",
+    "opciones": ["Recta", "Parabólica", "Circular", "Aleatoria"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué produce un solenoide con corriente constante?",
+    "opciones": [
+      "Campo eléctrico radial",
+      "Campo magnético uniforme",
+      "Campo gravitacional",
+      "Corriente alterna"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué aparato se usa para detectar campos magnéticos?",
+    "opciones": ["Voltímetro", "Electroscopio", "Brújula", "Ohmímetro"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué partículas son afectadas por campos magnéticos?",
+    "opciones": [
+      "Solo neutrones",
+      "Solo cargas en reposo",
+      "Cargas eléctricas en movimiento",
+      "Todas las partículas por igual"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre si se invierte la corriente en un conductor recto?",
+    "opciones": [
+      "La intensidad del campo magnético se duplica",
+      "El campo magnético cambia de dirección",
+      "Desaparece el campo magnético",
+      "Nada cambia"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué unidad alternativa al Tesla se usa a veces en magnetismo?",
+    "opciones": ["Voltio", "Ampere", "Gauss", "Weber"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cómo es la dirección del campo magnético en el interior de un solenoide largo?",
+    "opciones": [
+      "Radial",
+      "Variable",
+      "Uniforme y paralela al eje",
+      "En espiral"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué tipo de fuerza es la fuerza magnética?",
+    "opciones": [
+      "Conservativa",
+      "De contacto",
+      "A distancia",
+      "Nula sobre cargas negativas"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué forma tiene el campo magnético en un imán en forma de herradura?",
+    "opciones": [
+      "Circular",
+      "Uniforme entre los polos",
+      "Radial",
+      "Caótica"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cómo se comporta una brújula cerca de un imán?",
+    "opciones": [
+      "No se mueve",
+      "Se alinea con el campo magnético",
+      "Gira indefinidamente",
+      "Apunta hacia el sur magnético solamente"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre si un electrón entra en un campo magnético uniforme perpendicularmente?",
+    "opciones": [
+      "Se acelera en línea recta",
+      "Describe una trayectoria circular",
+      "No experimenta fuerza",
+      "Cambia de masa"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué campo se asocia con la ley de Ampère?",
+    "opciones": [
+      "Campo eléctrico",
+      "Campo magnético",
+      "Campo gravitacional",
+      "Campo sonoro"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué característica distingue al campo magnético de un imán de barra?",
+    "opciones": [
+      "Comienza y termina en el mismo polo",
+      "No tiene dirección",
+      "Forma líneas cerradas del norte al sur y viceversa",
+      "Es un campo eléctrico enmascarado"
+    ],
+    "correcta": 2
+  }
+],
+"Calor y Temperatura": [
+  {
+    "pregunta": "¿Qué es el calor en física?",
+    "opciones": [
+      "La sensación de frío o calor",
+      "Una forma de energía que se transfiere entre cuerpos a diferente temperatura",
+      "La energía total contenida en un cuerpo",
+      "El producto entre la masa y el volumen"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué es la temperatura?",
+    "opciones": [
+      "Una forma de energía en tránsito",
+      "La cantidad de calor que tiene un cuerpo",
+      "Una medida de la energía cinética promedio de las partículas de un cuerpo",
+      "Una medida del volumen"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué unidad se usa para medir la temperatura en el Sistema Internacional?",
+    "opciones": ["Grado Celsius", "Kelvin", "Fahrenheit", "Joule"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué unidad se usa para medir el calor?",
+    "opciones": ["Kelvin", "Grado", "Julio (J)", "Metro por segundo"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué instrumento se utiliza para medir la temperatura?",
+    "opciones": ["Termómetro", "Barómetro", "Amperímetro", "Calorímetro"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Cómo fluye el calor entre dos cuerpos?",
+    "opciones": [
+      "Del cuerpo con mayor masa al de menor masa",
+      "Del cuerpo más frío al más caliente",
+      "Del cuerpo con menor volumen al mayor",
+      "Del cuerpo más caliente al más frío"
+    ],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Qué ocurre con la temperatura de un cuerpo cuando gana calor?",
+    "opciones": [
+      "Disminuye",
+      "Permanece igual",
+      "Aumenta",
+      "Se vuelve cero"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre con las partículas de un cuerpo cuando su temperatura aumenta?",
+    "opciones": [
+      "Se detienen",
+      "Se alejan y vibran con más energía",
+      "Se congelan",
+      "Se comprimen"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Cuál es la escala de temperatura que comienza en el cero absoluto?",
+    "opciones": ["Celsius", "Fahrenheit", "Kelvin", "Rankine"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre con la temperatura de un cuerpo si pierde calor?",
+    "opciones": [
+      "Aumenta",
+      "Se vuelve infinita",
+      "Disminuye",
+      "Permanece constante"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué indica el 'cero absoluto' en la escala Kelvin?",
+    "opciones": [
+      "El punto de ebullición del agua",
+      "La temperatura del sol",
+      "La ausencia total de movimiento molecular",
+      "La temperatura de un refrigerador"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué tipo de energía representa el calor?",
+    "opciones": ["Cinética", "Potencial", "Eléctrica", "Térmica"],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Dos cuerpos pueden tener la misma temperatura y diferente cantidad de calor?",
+    "opciones": ["No", "Sí", "Solo si son del mismo material", "Solo en el vacío"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué significa que un cuerpo esté caliente?",
+    "opciones": [
+      "Que tiene más energía potencial",
+      "Que tiene una alta velocidad",
+      "Que su temperatura es elevada respecto a otro cuerpo",
+      "Que está lleno de electricidad"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre si dos cuerpos con diferente temperatura se ponen en contacto?",
+    "opciones": [
+      "El cuerpo más frío se calienta hasta igualar temperaturas",
+      "No hay intercambio de energía",
+      "El cuerpo más caliente se enfría indefinidamente",
+      "El calor fluye en ambas direcciones"
+    ],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Cuál es la temperatura de fusión del hielo en condiciones normales en °C?",
+    "opciones": ["0 °C", "100 °C", "32 °C", "273 °C"],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué escala de temperatura se usa principalmente en países anglosajones?",
+    "opciones": ["Kelvin", "Celsius", "Fahrenheit", "Rankine"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué se entiende por equilibrio térmico?",
+    "opciones": [
+      "Cuando un cuerpo se calienta",
+      "Cuando dos cuerpos alcanzan la misma temperatura",
+      "Cuando no hay calor",
+      "Cuando un cuerpo se enfría rápidamente"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué se necesita para que exista una transferencia de calor?",
+    "opciones": [
+      "Un cambio de masa",
+      "Un material conductor",
+      "Una diferencia de temperatura",
+      "La presencia de luz"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿La temperatura depende del tamaño del cuerpo?",
+    "opciones": [
+      "Sí, a mayor masa, mayor temperatura",
+      "No, la temperatura no depende del tamaño",
+      "Depende solo si el cuerpo es metálico",
+      "Solo si está en estado líquido"
+    ],
+    "correcta": 1
+  }
+],
+"Mecánica Cuantica": [
+  {
+  "pregunta": "¿Qué estudia principalmente la mecánica cuántica?",
+  "opciones": [
+    "El movimiento de los planetas",
+    "Los fenómenos térmicos",
+    "El comportamiento de partículas muy pequeñas como átomos y electrones",
+    "Las reacciones químicas a gran escala"
+  ],
+  "correcta": 2
+},
+{
+  "pregunta": "¿Cuál es una diferencia fundamental entre la física clásica y la mecánica cuántica?",
+  "opciones": [
+    "La física clásica no usa matemáticas",
+    "En la cuántica los resultados son siempre exactos",
+    "En la cuántica los resultados son probabilísticos",
+    "No hay diferencias importantes"
+  ],
+  "correcta": 2
+},
+{
+  "pregunta": "¿Qué partícula es considerada la unidad básica de la luz?",
+  "opciones": ["Átomo", "Electrón", "Protón", "Fotón"],
+  "correcta": 3
+},
+{
+  "pregunta": "¿Qué descubrió el experimento de la doble rendija con electrones?",
+  "opciones": [
+    "Que los electrones tienen masa",
+    "Que los electrones no se pueden observar",
+    "Que los electrones pueden comportarse como ondas",
+    "Que los electrones siempre se comportan como partículas"
+  ],
+  "correcta": 2
+},
+{
+  "pregunta": "¿Qué significa el principio de incertidumbre de Heisenberg?",
+  "opciones": [
+    "Que todo es incierto",
+    "Que no se puede conocer con exactitud simultáneamente la posición y la velocidad de una partícula",
+    "Que las partículas no existen",
+    "Que los experimentos cuánticos siempre fallan"
+  ],
+  "correcta": 1
+},
+{
+  "pregunta": "¿Qué es un 'estado cuántico'?",
+  "opciones": [
+    "Una forma de energía nuclear",
+    "Una posición específica de una partícula",
+    "Una descripción matemática del posible comportamiento de una partícula",
+    "Un error en los cálculos físicos"
+  ],
+  "correcta": 2
+},
+{
+  "pregunta": "¿Qué es un 'qubit' en computación cuántica?",
+  "opciones": [
+    "Una partícula invisible",
+    "Un error cuántico",
+    "Una unidad de información que puede estar en múltiples estados a la vez",
+    "Un número binario clásico"
+  ],
+  "correcta": 2
+},
+{
+  "pregunta": "¿Qué describe la función de onda en mecánica cuántica?",
+  "opciones": [
+    "La trayectoria exacta de una partícula",
+    "La energía total del sistema",
+    "La probabilidad de encontrar una partícula en cierto lugar",
+    "El número de partículas en el sistema"
+  ],
+  "correcta": 2
+},
+{
+  "pregunta": "¿Qué sucede cuando se observa un sistema cuántico?",
+  "opciones": [
+    "El sistema desaparece",
+    "Se modifica el resultado de forma aleatoria",
+    "El sistema 'elige' un estado definido",
+    "Nada cambia"
+  ],
+  "correcta": 2
+},
+{
+  "pregunta": "¿Qué significa que una partícula cuántica tenga un 'espín'?",
+  "opciones": [
+    "Que gira como una peonza",
+    "Que está en movimiento circular",
+    "Es una propiedad intrínseca similar al momento angular",
+    "Que está girando alrededor de un núcleo"
+  ],
+  "correcta": 2
+}
+]
+
 }
 
 
