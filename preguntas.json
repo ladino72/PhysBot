@@ -1171,7 +1171,7 @@
     "correcta": 1
   }
 ],
-"FenomenosElectrostaticos": [
+"Fenomenos Electrostaticos": [
   {
     "pregunta": "¿Qué tipo de carga tienen los protones?",
     "opciones": ["Negativa", "Neutra", "Positiva", "Variable"],
@@ -1203,15 +1203,16 @@
     "correcta": 1
   },
   {
-    "pregunta": "¿Qué dice la ley de Coulomb?",
+    "pregunta": "¿Qué describe la ley de Coulomb?",
     "opciones": [
-      "La energía se conserva",
-      "La fuerza entre cargas es directamente proporcional al producto de las cargas e inversamente proporcional al cuadrado de la distancia entre ellas",
-      "La carga depende de la masa",
-      "La fuerza entre cargas es constante"
+      "Conservación de la energía",
+      "Fuerza proporcional al producto de las cargas e inversa al cuadrado de la distancia",
+      "Relación entre masa y carga",
+      "Fuerza constante entre cargas"
     ],
     "correcta": 1
   },
+  
   {
     "pregunta": "¿Qué significa que la carga esté cuantizada?",
     "opciones": [
@@ -1337,12 +1338,12 @@
 ],
 "Campo Eléctrico": [
   {
-    "pregunta": "¿Qué representa el campo eléctrico en física?",
+    "pregunta": "¿Qué es el campo eléctrico?",
     "opciones": [
-      "La fuerza ejercida sobre un cuerpo por la gravedad",
-      "La velocidad de una carga en movimiento",
-      "La región del espacio donde una carga experimenta una fuerza eléctrica",
-      "La dirección del flujo de corriente"
+      "Fuerza de gravedad",
+      "Velocidad de una carga",
+      "Región donde actúa una fuerza sobre una carga",
+      "Dirección de la corriente"
     ],
     "correcta": 2
   },
@@ -1457,15 +1458,16 @@
     "correcta": 1
   },
   {
-    "pregunta": "¿Qué punto se considera al calcular el campo eléctrico de una carga puntual?",
+    "pregunta": "¿Puede el campo eléctrico ser cero entre dos cargas?",
     "opciones": [
-      "En el centro de la carga",
-      "En cualquier punto del espacio",
-      "En el punto donde se evalúa la fuerza sobre una carga de prueba",
-      "En el borde del conductor"
+      "Sí, si son de igual signo y el punto está entre ellas",
+      "Sí, si son de signo opuesto y el punto está entre ellas",
+      "No, el campo nunca puede ser cero",
+      "Solo si ambas cargas están en movimiento"
     ],
-    "correcta": 2
-  },
+    "correcta": 0
+  }
+  ,
   {
     "pregunta": "¿Qué dirección tiene el campo eléctrico de una carga positiva?",
     "opciones": [
@@ -1527,6 +1529,194 @@
     "correcta": 1
   }
 ],
+"PotencialElectrico": [
+  {
+    "pregunta": "¿Qué es el potencial eléctrico en un punto?",
+    "opciones": [
+      "La fuerza sobre una carga en ese punto",
+      "La energía cinética de una carga",
+      "La energía potencial por unidad de carga",
+      "La velocidad de una carga"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuál es la unidad del potencial eléctrico en el Sistema Internacional?",
+    "opciones": ["Joule", "Coulomb", "Newton", "Voltio"],
+    "correcta": 3
+  },
+  {
+    "pregunta": "¿Qué representa una diferencia de potencial entre dos puntos?",
+    "opciones": [
+      "Una diferencia de carga",
+      "La fuerza entre dos partículas",
+      "El trabajo necesario para mover una carga entre esos puntos",
+      "La cantidad de corriente eléctrica"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cómo se comporta el potencial eléctrico al alejarse de una carga positiva?",
+    "opciones": [
+      "Aumenta",
+      "Permanece constante",
+      "Disminuye",
+      "Se vuelve negativo"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿El potencial eléctrico es una magnitud...?",
+    "opciones": [
+      "Vectorial",
+      "Escalar",
+      "Adimensional",
+      "Dependiente del tiempo"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre con una carga positiva colocada en una región de alto potencial?",
+    "opciones": [
+      "Se queda en reposo",
+      "Es atraída hacia regiones de menor potencial",
+      "Es repelida por completo",
+      "Pierde masa"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Dónde es mayor el potencial eléctrico: cerca o lejos de una carga positiva?",
+    "opciones": [
+      "Lejos de la carga",
+      "Cerca de la carga",
+      "Es igual en todos los puntos",
+      "No depende de la distancia"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué ocurre con el potencial eléctrico en un conductor en equilibrio?",
+    "opciones": [
+      "Es mayor en el centro",
+      "Es menor en la superficie",
+      "Es constante en toda su superficie",
+      "Depende de la masa"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué requiere más trabajo: mover una carga entre puntos de igual potencial o diferente potencial?",
+    "opciones": [
+      "Igual potencial",
+      "Diferente potencial",
+      "Ambos requieren el mismo trabajo",
+      "No se puede determinar"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué representa una superficie equipotencial?",
+    "opciones": [
+      "Una línea de campo magnético",
+      "Una región donde el potencial es el mismo en todos sus puntos",
+      "Una superficie sin energía",
+      "Una zona sin carga"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué dirección tiene el campo eléctrico respecto a una superficie equipotencial?",
+    "opciones": [
+      "Paralela",
+      "Tangente",
+      "Perpendicular",
+      "En espiral"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Puede haber campo eléctrico entre dos puntos con el mismo potencial?",
+    "opciones": [
+      "Sí, siempre",
+      "No, nunca",
+      "Solo si hay masa",
+      "Solo si hay movimiento"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué signo tiene el potencial eléctrico creado por una carga negativa?",
+    "opciones": ["Positivo", "Negativo", "Cero", "Variable"],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿En qué unidad se mide el trabajo eléctrico?",
+    "opciones": ["Volt", "Coulomb", "Joule", "Ohm"],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué relación existe entre campo eléctrico y potencial?",
+    "opciones": [
+      "El campo es igual al potencial dividido entre la distancia",
+      "El campo es el gradiente (cambio) del potencial",
+      "No hay relación",
+      "Son magnitudes equivalentes"
+    ],
+    "correcta": 1
+  },
+  {
+    "pregunta": "¿Qué significa que el potencial eléctrico en un punto sea cero?",
+    "opciones": [
+      "Que no hay carga en ese punto",
+      "Que el campo eléctrico es nulo",
+      "Que no se requiere trabajo para traer una carga desde el infinito",
+      "Que no hay diferencia de potencial"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Cuándo se dice que una carga tiene energía potencial eléctrica?",
+    "opciones": [
+      "Cuando está en movimiento",
+      "Cuando está en un punto con campo magnético",
+      "Cuando se encuentra en una región con potencial eléctrico",
+      "Cuando gira en espiral"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre con una carga negativa en una región de alto potencial?",
+    "opciones": [
+      "Tiende a moverse hacia mayor potencial",
+      "Se mueve hacia menor potencial",
+      "Permanece en reposo",
+      "Gira alrededor del campo"
+    ],
+    "correcta": 0
+  },
+  {
+    "pregunta": "¿Qué se necesita para que una carga experimente una diferencia de potencial?",
+    "opciones": [
+      "Que esté en movimiento",
+      "Que exista un campo magnético",
+      "Que se ubique entre dos regiones con distinto potencial",
+      "Que se encuentre en equilibrio térmico"
+    ],
+    "correcta": 2
+  },
+  {
+    "pregunta": "¿Qué ocurre con la energía potencial eléctrica si una carga se mueve en contra del campo eléctrico?",
+    "opciones": [
+      "Disminuye",
+      "Permanece constante",
+      "Aumenta",
+      "Se vuelve cero"
+    ],
+    "correcta": 2
+  }
+],
+
 "Campo Magnético": [
   {
     "pregunta": "¿Qué representa un campo magnético?",
