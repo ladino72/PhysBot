@@ -222,8 +222,10 @@ function enviarPregunta(userId) {
   if (!estado || estado.index >= estado.preguntas.length) return finalizarQuiz(userId);
   const p = estado.preguntas[estado.index];
   const opciones = p.opciones.map((op, i) => [{ text: op, callback_data: `r:${estado.index}:${i}` }]);
-  bot.sendMessage(userId, `⏳ 30 segundos...\n\n❓ ${p.pregunta}`, {
-    reply_markup: { inline_keyboard: opciones }
+  const actual = estado.index + 1;
+  const total = estado.preguntas.length;
+  bot.sendMessage(userId, `⏳ 30 segundos...\n\n📘 Pregunta ${actual} de ${total}\n\n❓ ${p.pregunta}`, {
+  reply_markup: { inline_keyboard: opciones }
   }).then(msg => iniciarCuentaRegresiva(userId, msg.message_id, p.pregunta, opciones));
 }
 
@@ -254,10 +256,12 @@ function iniciarCuentaRegresiva(userId, messageId, texto, opciones) {
       return;
     }
 
-    bot.editMessageText(`⏳ ${tiempo} segundos restantes\n\n❓ ${texto}`, {
-      chat_id: userId,
-      message_id: messageId,
-      reply_markup: { inline_keyboard: opciones }
+    const actual = estado.index + 1;
+    const total = estado.preguntas.length;
+    bot.editMessageText(`⏳ ${tiempo} segundos restantes\n\n📘 Pregunta ${actual} de ${total}\n\n❓ ${texto}`, {
+    chat_id: userId,
+    message_id: messageId,
+    reply_markup: { inline_keyboard: opciones }
     }).catch(() => {});
   }, 1000);
 

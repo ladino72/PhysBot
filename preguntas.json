@@ -436,7 +436,7 @@
   }
   ],
   
-  "AnalisisDimensional": [
+  "Analisis Dimensional": [
   {
       "pregunta": "¿Cuál es la dimensión del trabajo en el Sistema Internacional de Unidades (SI)?",
       "opciones": [
@@ -1171,7 +1171,7 @@
     "correcta": 1
   }
 ],
-"Fenomenos Electrostaticos": [
+"Fenómenos Electrostáticos": [
   {
     "pregunta": "¿Qué tipo de carga tienen los protones?",
     "opciones": ["Negativa", "Neutra", "Positiva", "Variable"],
