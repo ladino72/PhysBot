@@ -1529,7 +1529,7 @@
     "correcta": 1
   }
 ],
-"PotencialElectrico": [
+"Potencial Eléctrico": [
   {
     "pregunta": "¿Qué es el potencial eléctrico en un punto?",
     "opciones": [
@@ -2061,108 +2061,7 @@
     "correcta": 1
   }
 ],
-"Mecánica cuántica":[
-{
-  "pregunta": "¿Qué papel juega la probabilidad en la mecánica cuántica?",
-  "opciones": [
-    "Ninguno",
-    "Predice valores exactos",
-    "Calcula dónde puede estar la partícula",
-    "Solo en física clásica"
-  ],
-  "correcta": 2
-},
-{
-  "pregunta": "¿Qué es la cuantización de la energía?",
-  "opciones": [
-    "Puede tomar cualquier valor",
-    "Solo sube con el tiempo",
-    "Se transfiere en paquetes",
-    "No hay energía"
-  ],
-  "correcta": 2
-},
-{
-  "pregunta": "¿Qué explica el efecto fotoeléctrico?",
-  "opciones": [
-    "Colapso de onda",
-    "Dualidad onda-partícula",
-    "Espín del electrón",
-    "Campo unificado"
-  ],
-  "correcta": 1
-},
-{
-  "pregunta": "¿Dónde se encuentra un electrón en un átomo?",
-  "opciones": [
-    "En órbita circular",
-    "Con velocidad constante",
-    "En un orbital",
-    "En espiral"
-  ],
-  "correcta": 2
-},
-{
-  "pregunta": "¿Cómo se llama cruzar una barrera sin energía suficiente?",
-  "opciones": [
-    "Rebote",
-    "Desintegración",
-    "Efecto túnel",
-    "Nada"
-  ],
-  "correcta": 2
-},
-{
-  "pregunta": "¿Qué es la dualidad onda-partícula?",
-  "opciones": [
-    "Propiedad del sonido",
-    "Comportarse como onda y partícula",
-    "Teoría de Einstein",
-    "Contradicción"
-  ],
-  "correcta": 1
-},
-{
-  "pregunta": "¿Qué demuestra la interferencia de electrones?",
-  "opciones": [
-    "Cámara de niebla",
-    "Microscopio",
-    "Doble rendija",
-    "Vacío"
-  ],
-  "correcta": 2
-},
-{
-  "pregunta": "¿Qué representa la constante de Planck?",
-  "opciones": [
-    "Carga mínima",
-    "Velocidad máxima",
-    "Relación energía-frecuencia",
-    "Masa de reposo"
-  ],
-  "correcta": 2
-},
-{
-  "pregunta": "¿Qué pasa si dos partículas están entrelazadas?",
-  "opciones": [
-    "Una desaparece",
-    "Comparten estado",
-    "Se destruyen",
-    "Pierden energía"
-  ],
-  "correcta": 1
-},
-{
-  "pregunta": "¿Qué es el colapso de la función de onda?",
-  "opciones": [
-    "Desaparece la partícula",
-    "Destruye el campo",
-    "Elige un estado al medir",
-    "Cambia su masa"
-  ],
-  "correcta": 2
-}
-],
+
 "Mecánica Cuántica": [
   {
     "pregunta": "¿Qué estudia la mecánica cuántica?",

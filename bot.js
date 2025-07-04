@@ -144,6 +144,7 @@ bot.onText(/\/minota/, (msg) => {
   const puntajes = leerJSON(RUTA_PUNTAJES);
   const userId = String(msg.chat.id);
   const usuarioNotas = puntajes[userId];
+  console.log(`🔍 Notas del usuario ${userId}:`, usuarioNotas);  //
   if (!usuarioNotas) return enviarConReintento(msg.chat.id, '❌ No tienes nota registrada.');
   const botones = Object.entries(usuarioNotas).map(([tema, nota]) => ([{
     text: `${tema} (${nota.puntaje}/${nota.total})`, callback_data: `minota:${tema}`
