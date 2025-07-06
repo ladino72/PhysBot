@@ -29,6 +29,7 @@ app.listen(port, () => {
 });
 
 
+const estados = {};  // clave: userId, valor: { timer, materia, tema, index }
 
 
 // Archivos
@@ -75,23 +76,42 @@ function sendTemasMenu(chatId, materia) {
 }
 
 // Mostrar pregunta por índice
-function sendPregunta(chatId, materia, tema, index = 0) {
+function sendPregunta(chatId, materia, tema, index = 0, userId) {
   const lista = preguntas[materia][tema];
   if (!lista || !lista[index]) {
     return bot.sendMessage(chatId, '❌ No hay más preguntas.');
   }
 
+  const total = lista.length;
   const q = lista[index];
+
+  // Guardar estado temporal
+  if (!estados[userId]) estados[userId] = {};
+  estados[userId].materia = materia;
+  estados[userId].tema = tema;
+  estados[userId].index = index;
+
+  // Cancelar temporizador anterior si existe
+  if (estados[userId].timer) clearTimeout(estados[userId].timer);
+
+  // Programar temporizador de 25 segundos
+  estados[userId].timer = setTimeout(() => {
+    bot.sendMessage(chatId, `⏱️ Tiempo agotado para la pregunta ${index + 1} de ${total}. Se considera incorrecta.`);
+    procesarRespuesta(chatId, userId, materia, tema, index, -1);  // -1 = no respondió
+  }, 25000);
+
+  // Crear botones
   const opciones = q.opciones.map((op, i) => [{
     text: op,
     callback_data: `respuesta_${materia}_${tema}_${index}_${i}`
   }]);
 
-  bot.sendMessage(chatId, `❓ *${q.pregunta}*`, {
+  bot.sendMessage(chatId, `❓ Pregunta ${index + 1} de ${total}:\n*${q.pregunta}*`, {
     parse_mode: 'Markdown',
     reply_markup: { inline_keyboard: opciones }
   });
 }
+
 
 // /start
 bot.onText(/\/start/, (msg) => {
@@ -143,6 +163,15 @@ bot.on('callback_query', (query) => {
     return;
   }
 
+  if (data.startsWith('respuesta_')) {
+    const [, materia, tema, indexStr, opcionStr] = data.split('_');
+    const userId = query.from.id.toString();
+    const chatId = query.message.chat.id;
+  
+    procesarRespuesta(chatId, userId, materia, tema, parseInt(indexStr), parseInt(opcionStr));
+  }
+  
+
 
   if (data.startsWith('respuesta_')) {
     const [, materia, tema, indexStr, opcionStr] = data.split('_');
@@ -188,3 +217,49 @@ bot.on('callback_query', (query) => {
 
   bot.answerCallbackQuery(query.id);
 });
+
+function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
+  const lista = preguntas[materia][tema];
+  const pregunta = lista[index];
+  const correcta = pregunta.correcta;
+
+  // Limpiar temporizador
+  if (estados[userId]?.timer) {
+    clearTimeout(estados[userId].timer);
+    delete estados[userId].timer;
+  }
+
+  // Cargar puntajes
+  const puntajes = cargarPuntajes();
+  if (!puntajes[userId]) puntajes[userId] = {};
+  if (!puntajes[userId][materia]) puntajes[userId][materia] = {};
+  if (!puntajes[userId][materia][tema]) puntajes[userId][materia][tema] = 0;
+
+  if (opcion === correcta) {
+    bot.sendMessage(chatId, '✅ ¡Correcto!');
+    puntajes[userId][materia][tema] += 1;
+  } else {
+    bot.sendMessage(chatId, `❌ Incorrecto. La correcta era: *${pregunta.opciones[correcta]}*`, {
+      parse_mode: 'Markdown'
+    });
+  }
+
+  guardarPuntajes(puntajes);
+
+  const siguiente = index + 1;
+  if (lista[siguiente]) {
+    sendPregunta(chatId, materia, tema, siguiente, userId);
+  } else {
+    bot.sendMessage(chatId, `🎉 Has terminado el tema *${tema}* de *${materia}*.`, {
+      parse_mode: 'Markdown',
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '🔙 Volver a Temas', callback_data: `materia_${materia}` }],
+          [{ text: '🏠 Volver a Materias', callback_data: 'volver_materias' }]
+        ]
+      }
+    });
+
+    delete estados[userId];  // limpiar estado del usuario
+  }
+}
