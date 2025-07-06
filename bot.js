@@ -100,25 +100,20 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
     }
   }, 25000);
 
-  // 🕒 Mostrar cronómetro con barra de emojis
-bot.sendMessage(chatId, `⏳ Tiempo restante: 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`).then(timerMsg => {
+// 🕒 Mostrar cronómetro visual con emojis
+bot.sendMessage(chatId, '⏳ Tiempo restante: 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵').then(timerMsg => {
   estados[userId].mensajeTimerId = timerMsg.message_id;
   estados[userId].tiempoRestante = 25;
 
   estados[userId].interval = setInterval(() => {
-    estados[userId].tiempoRestante -= 1;
+    const restantes = --estados[userId].tiempoRestante;
 
-    const restantes = estados[userId].tiempoRestante;
     if (restantes <= 0) {
       clearInterval(estados[userId].interval);
       return;
     }
 
-    const total = 25;
-    const filled = '🔵'.repeat(restantes);
-    const empty = '⚪'.repeat(total - restantes);
-    const barra = filled + empty;
-
+    const barra = '🔵'.repeat(restantes) + '⚪'.repeat(25 - restantes);
     bot.editMessageText(
       `⏳ Tiempo restante: ${barra} (${restantes}s)`,
       {
@@ -243,7 +238,6 @@ bot.onText(/\/parar/, (msg) => {
 
   if (estados[userId].timer) clearTimeout(estados[userId].timer);
   if (estados[userId].interval) clearInterval(estados[userId].interval);
-
   if (estados[userId].mensajeTimerId) {
     bot.deleteMessage(chatId, estados[userId].mensajeTimerId).catch(() => {});
   }
