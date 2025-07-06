@@ -88,8 +88,11 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
   estados[userId].index = index;
   estados[userId].respondido = false;
 
+  // Cancelar temporizadores anteriores
   if (estados[userId].timer) clearTimeout(estados[userId].timer);
+  if (estados[userId].interval) clearInterval(estados[userId].interval);
 
+  // ⏲️ Temporizador para evaluar tras 25s
   estados[userId].timer = setTimeout(() => {
     if (!estados[userId].respondido) {
       bot.sendMessage(chatId, `⏱️ Tiempo agotado para la pregunta ${index + 1} de ${total}. Se considera incorrecta.`);
@@ -97,12 +100,35 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
     }
   }, 25000);
 
+  // 🕒 Mostrar cronómetro y actualizarlo cada segundo
+  bot.sendMessage(chatId, `⏳ Tiempo restante: 25 segundos`).then(timerMsg => {
+    estados[userId].mensajeTimerId = timerMsg.message_id;
+    estados[userId].tiempoRestante = 25;
+
+    estados[userId].interval = setInterval(() => {
+      estados[userId].tiempoRestante -= 1;
+
+      if (estados[userId].tiempoRestante <= 0) {
+        clearInterval(estados[userId].interval);
+        return;
+      }
+
+      bot.editMessageText(
+        `⏳ Tiempo restante: ${estados[userId].tiempoRestante} segundos`,
+        {
+          chat_id: chatId,
+          message_id: estados[userId].mensajeTimerId
+        }
+      ).catch(() => {});
+    }, 1000);
+  });
+
   const opciones = q.opciones.map((op, i) => [{
     text: op,
     callback_data: `respuesta_${materia}_${tema}_${index}_${i}`
   }]);
 
-  const mensaje = `*⏳ Tienes 25 segundos*\n*❓ Pregunta ${index + 1} de ${total}*\n\n${q.pregunta}`;
+  const mensaje = `*❓ Pregunta ${index + 1} de ${total}*\n\n${q.pregunta}`;
 
   bot.sendMessage(chatId, mensaje, {
     parse_mode: 'Markdown',
