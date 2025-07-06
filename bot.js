@@ -73,7 +73,34 @@ function sendTemasMenu(chatId, materia) {
 }
 
 // Mostrar pregunta
-// 🕒 Mostrar cronómetro con barra de emojis
+function sendPregunta(chatId, materia, tema, index = 0, userId) {
+  const lista = preguntas[materia][tema];
+  if (!lista || !lista[index]) {
+    return bot.sendMessage(chatId, '❌ No hay más preguntas.');
+  }
+
+  const total = lista.length;
+  const q = lista[index];
+
+  if (!estados[userId]) estados[userId] = {};
+  estados[userId].materia = materia;
+  estados[userId].tema = tema;
+  estados[userId].index = index;
+  estados[userId].respondido = false;
+
+  // Cancelar temporizadores anteriores
+  if (estados[userId].timer) clearTimeout(estados[userId].timer);
+  if (estados[userId].interval) clearInterval(estados[userId].interval);
+
+  // ⏲️ Temporizador para evaluar tras 25s
+  estados[userId].timer = setTimeout(() => {
+    if (!estados[userId].respondido) {
+      bot.sendMessage(chatId, `⏱️ Tiempo agotado para la pregunta ${index + 1} de ${total}. Se considera incorrecta.`);
+      procesarRespuesta(chatId, userId, materia, tema, index, -1);
+    }
+  }, 25000);
+
+  // 🕒 Mostrar cronómetro con barra de emojis
 bot.sendMessage(chatId, `⏳ Tiempo restante: 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`).then(timerMsg => {
   estados[userId].mensajeTimerId = timerMsg.message_id;
   estados[userId].tiempoRestante = 25;
@@ -102,42 +129,6 @@ bot.sendMessage(chatId, `⏳ Tiempo restante: 🔵🔵🔵🔵🔵🔵🔵🔵�
   }, 1000);
 });
 
-
-  // 🕒 Mostrar cronómetro y actualizarlo cada segundo
-  bot.sendMessage(chatId, `⏳ Tiempo restante: 25 segundos`).then(timerMsg => {
-    estados[userId].mensajeTimerId = timerMsg.message_id;
-    estados[userId].tiempoRestante = 25;
-
-    estados[userId].interval = setInterval(() => {
-      estados[userId].tiempoRestante -= 1;
-
-      if (estados[userId].tiempoRestante <= 0) {
-        clearInterval(estados[userId].interval);
-        return;
-      }
-
-      bot.editMessageText(
-        `⏳ Tiempo restante: ${estados[userId].tiempoRestante} segundos`,
-        {
-          chat_id: chatId,
-          message_id: estados[userId].mensajeTimerId
-        }
-      ).catch(() => {});
-    }, 1000);
-  });
-
-  const opciones = q.opciones.map((op, i) => [{
-    text: op,
-    callback_data: `respuesta_${materia}_${tema}_${index}_${i}`
-  }]);
-
-  const mensaje = `*❓ Pregunta ${index + 1} de ${total}*\n\n${q.pregunta}`;
-
-  bot.sendMessage(chatId, mensaje, {
-    parse_mode: 'Markdown',
-    reply_markup: { inline_keyboard: opciones }
-  });
-}
 
 
 // Evaluar respuesta
@@ -240,6 +231,7 @@ bot.on('callback_query', (query) => {
 
   bot.answerCallbackQuery(query.id);
 });
+}
 
 bot.onText(/\/parar/, (msg) => {
   const userId = msg.from.id.toString();
