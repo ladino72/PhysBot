@@ -50,10 +50,13 @@ function sendMateriasMenu(chatId) {
   const materias = Object.keys(preguntas);
   const botones = materias.map(m => [{ text: m, callback_data: `materia_${m}` }]);
 
+  botones.push([{ text: '📊 Mi Nota', callback_data: 'ver_mi_nota' }]);
+
   bot.sendMessage(chatId, '📘 Elige una materia:', {
     reply_markup: { inline_keyboard: botones }
   });
 }
+
 
 // Menú de temas (por materia)
 function sendTemasMenu(chatId, materia) {
@@ -114,6 +117,32 @@ bot.on('callback_query', (query) => {
     const [, materia, tema] = data.split('_');
     return sendPregunta(chatId, materia, tema, 0);
   }
+
+  if (data === 'ver_mi_nota') {
+    const puntajes = cargarPuntajes();
+    const userData = puntajes[userId];
+
+    if (!userData) {
+      return bot.sendMessage(chatId, 'ℹ️ Aún no has respondido ningún tema.');
+    }
+
+    let resumen = '📊 *Tu Puntaje Acumulado:*\n\n';
+
+    for (const materia in userData) {
+      resumen += `📘 *${materia}*\n`;
+
+      for (const tema in userData[materia]) {
+        const puntos = userData[materia][tema];
+        resumen += `   • ${tema}: ${puntos} punto(s)\n`;
+      }
+
+      resumen += '\n';
+    }
+
+    bot.sendMessage(chatId, resumen, { parse_mode: 'Markdown' });
+    return;
+  }
+
 
   if (data.startsWith('respuesta_')) {
     const [, materia, tema, indexStr, opcionStr] = data.split('_');
