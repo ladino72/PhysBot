@@ -102,11 +102,14 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
     callback_data: `respuesta_${materia}_${tema}_${index}_${i}`
   }]);
 
-  bot.sendMessage(chatId, `❓ *Pregunta ${index + 1} de ${total}*\n${q.pregunta}`, {
+  const mensaje = `*⏳ Tienes 25 segundos*\n*❓ Pregunta ${index + 1} de ${total}*\n\n${q.pregunta}`;
+
+  bot.sendMessage(chatId, mensaje, {
     parse_mode: 'Markdown',
     reply_markup: { inline_keyboard: opciones }
   });
 }
+
 
 // Evaluar respuesta
 function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
