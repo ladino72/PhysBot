@@ -219,17 +219,18 @@ bot.on('callback_query', (query) => {
 });
 
 function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
-  const lista = preguntas[materia][tema];
-  const pregunta = lista[index];
-  const correcta = pregunta.correcta;
+  if (estados[userId]?.respondido) return; // evita respuestas duplicadas
+  estados[userId].respondido = true;
 
-  // Limpiar temporizador
   if (estados[userId]?.timer) {
     clearTimeout(estados[userId].timer);
     delete estados[userId].timer;
   }
 
-  // Cargar puntajes
+  const lista = preguntas[materia][tema];
+  const pregunta = lista[index];
+  const correcta = pregunta.correcta;
+
   const puntajes = cargarPuntajes();
   if (!puntajes[userId]) puntajes[userId] = {};
   if (!puntajes[userId][materia]) puntajes[userId][materia] = {};
@@ -248,7 +249,10 @@ function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
 
   const siguiente = index + 1;
   if (lista[siguiente]) {
-    sendPregunta(chatId, materia, tema, siguiente, userId);
+    setTimeout(() => {
+      estados[userId].respondido = false; // permite responder la siguiente
+      sendPregunta(chatId, materia, tema, siguiente, userId);
+    }, 1000); // pequeño delay para que no se vea abrupto
   } else {
     bot.sendMessage(chatId, `🎉 Has terminado el tema *${tema}* de *${materia}*.`, {
       parse_mode: 'Markdown',
@@ -259,7 +263,7 @@ function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
         ]
       }
     });
-
-    delete estados[userId];  // limpiar estado del usuario
+    delete estados[userId];
   }
 }
+
