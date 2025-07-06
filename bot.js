@@ -101,52 +101,44 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
   }, 25000);
 
   // 🕒 Mostrar cronómetro y actualizarlo cada segundo
-  // 🕒 Mostrar cronómetro visual con emojis
-bot.sendMessage(chatId, '⏳ Tiempo restante: 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵').then(timerMsg => {
-  estados[userId].mensajeTimerId = timerMsg.message_id;
-  estados[userId].tiempoRestante = 25;
+  bot.sendMessage(chatId, `⏳ Tiempo restante: 25 segundos`).then(timerMsg => {
+    estados[userId].mensajeTimerId = timerMsg.message_id;
+    estados[userId].tiempoRestante = 25;
 
-  estados[userId].interval = setInterval(() => {
-    estados[userId].tiempoRestante -= 1;
+    estados[userId].interval = setInterval(() => {
+      estados[userId].tiempoRestante -= 1;
 
-    const restantes = estados[userId].tiempoRestante;
-
-    if (restantes <= 0) {
-      clearInterval(estados[userId].interval);
-      return;
-    }
-
-    const barra = '🔵'.repeat(restantes) + '⚪'.repeat(25 - restantes);
-
-    bot.editMessageText(
-      `⏳ Tiempo restante: ${barra} (${restantes}s)`,
-      {
-        chat_id: chatId,
-        message_id: estados[userId].mensajeTimerId
+      if (estados[userId].tiempoRestante <= 0) {
+        clearInterval(estados[userId].interval);
+        return;
       }
-    ).catch(() => {});
-  }, 1000);
-});
 
+      bot.editMessageText(
+        `⏳ Tiempo restante: ${estados[userId].tiempoRestante} segundos`,
+        {
+          chat_id: chatId,
+          message_id: estados[userId].mensajeTimerId
+        }
+      ).catch(() => {});
+    }, 1000);
+  });
+
+  const opciones = q.opciones.map((op, i) => [{
+    text: op,
+    callback_data: `respuesta_${materia}_${tema}_${index}_${i}`
+  }]);
+
+  const mensaje = `*❓ Pregunta ${index + 1} de ${total}*\n\n${q.pregunta}`;
+
+  bot.sendMessage(chatId, mensaje, {
+    parse_mode: 'Markdown',
+    reply_markup: { inline_keyboard: opciones }
+  });
+}
 
 
 // Evaluar respuesta
 function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
-
-  if (estados[userId]?.interval) {
-    clearInterval(estados[userId].interval);
-    delete estados[userId].interval;
-  }
-  
-  if (estados[userId]?.mensajeTimerId) {
-    bot.deleteMessage(chatId, estados[userId].mensajeTimerId).catch(() => {});
-    delete estados[userId].mensajeTimerId;
-  }
-  
-
-
-
-
   if (estados[userId]?.respondido) return;
   estados[userId].respondido = true;
 
