@@ -1,7 +1,7 @@
+// Archivo completo actualizado para estructura por materias y tópicos
 require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
-
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 
@@ -20,16 +20,9 @@ app.post(`/bot${token}`, (req, res) => {
   res.sendStatus(200);
 });
 
-//bot.onText(/\/start/, (msg) => {
-  //bot.sendMessage(msg.chat.id, '✅ Bot en producción con webhook funcionando.');
-//});
-
 app.listen(port, () => {
   console.log(`🚀 Servidor escuchando en puerto ${port}`);
 });
-
-
-
 
 const adminPermitido = 8136071960;
 const RUTA_PUNTAJES = path.join(__dirname, 'puntajes.json');
@@ -106,18 +99,6 @@ let estadoTrivia = {};
 let usuariosActivos = new Map();
 const LIMITE_USUARIOS_CONCURRENTES = 30;
 
-bot.onText(/\/activar/, (msg) => {
-  if (msg.chat.id !== adminPermitido) return enviarConReintento(msg.chat.id, '🚫 Solo el profesor puede usar este comando.');
-  setCursoActivo(true);
-  enviarConReintento(msg.chat.id, '✅ Curso activado.');
-});
-
-bot.onText(/\/desactivar/, (msg) => {
-  if (msg.chat.id !== adminPermitido) return enviarConReintento(msg.chat.id, '🚫 Solo el profesor puede usar este comando.');
-  setCursoActivo(false);
-  enviarConReintento(msg.chat.id, '⛔ Curso desactivado.');
-});
-
 bot.onText(/\/start/, (msg) => {
   enviarConReintento(
     msg.chat.id,
@@ -132,24 +113,10 @@ bot.onText(/\/start/, (msg) => {
 
 bot.onText(/\/temas/, (msg) => {
   if (!cursoActivo()) return enviarConReintento(msg.chat.id, '⛔ El curso está desactivado.');
-  const temas = Object.keys(bancoTemas);
-  if (temas.length === 0) return enviarConReintento(msg.chat.id, '⚠️ No hay temáticas disponibles.');
-  const botones = temas.map(t => ([{ text: t, callback_data: `tema:${t}` }]));
-  enviarConReintento(msg.chat.id, '📚 Elige una temática para comenzar:', {
-    reply_markup: { inline_keyboard: botones }
-  });
-});
-
-bot.onText(/\/minota/, (msg) => {
-  const puntajes = leerJSON(RUTA_PUNTAJES);
-  const userId = String(msg.chat.id);
-  const usuarioNotas = puntajes[userId];
-  console.log(`🔍 Notas del usuario ${userId}:`, usuarioNotas);  //
-  if (!usuarioNotas) return enviarConReintento(msg.chat.id, '❌ No tienes nota registrada.');
-  const botones = Object.entries(usuarioNotas).map(([tema, nota]) => ([{
-    text: `${tema} (${nota.puntaje}/${nota.total})`, callback_data: `minota:${tema}`
-  }]));
-  enviarConReintento(msg.chat.id, '🧪 Elige temática para ver tu nota:', {
+  const materias = Object.keys(bancoTemas);
+  if (materias.length === 0) return enviarConReintento(msg.chat.id, '⚠️ No hay materias disponibles.');
+  const botones = materias.map(m => ([{ text: m, callback_data: `materia:${m}` }]));
+  enviarConReintento(msg.chat.id, '📚 Elige una materia:', {
     reply_markup: { inline_keyboard: botones }
   });
 });
@@ -159,166 +126,150 @@ bot.on('callback_query', (cb) => {
   const data = cb.data;
   const nombre = cb.from.first_name;
 
-  if (data.startsWith('tema:')) {
-    const tema = data.split(':')[1];
-    if (!bancoTemas[tema]) return enviarConReintento(userId, '❌ Temática inválida.');
-    if (usuariosActivos.size >= LIMITE_USUARIOS_CONCURRENTES) return enviarConReintento(userId, '🚫 Límite de usuarios alcanzado.');
+  if (data.startsWith('materia:')) {
+    const materia = data.split(':')[1];
+    const topicos = bancoTemas[materia] ? Object.keys(bancoTemas[materia]) : [];
+    if (topicos.length === 0) return enviarConReintento(userId, '❌ No hay tópicos para esta materia.');
+    const botones = topicos.map(t => ([{ text: t, callback_data: `topico:${materia}:${t}` }]));
+    enviarConReintento(userId, `📖 Elige un tópico de *${materia}*`, {
+      reply_markup: { inline_keyboard: botones },
+      parse_mode: 'Markdown'
+    });
+    bot.answerCallbackQuery(cb.id);
+  }
 
-    const preguntas = mezclarPreguntas(bancoTemas[tema]);
-    estadoTrivia[userId] = { nombre, index: 0, puntaje: 0, preguntas, tema };
+  if (data.startsWith('topico:')) {
+    const [, materia, topico] = data.split(':');
+    if (!bancoTemas[materia] || !bancoTemas[materia][topico]) {
+      return enviarConReintento(userId, '❌ Tópico inválido.');
+    }
+    if (usuariosActivos.size >= LIMITE_USUARIOS_CONCURRENTES) {
+      return enviarConReintento(userId, '🚫 Límite de usuarios activos alcanzado.');
+    }
+
+    const preguntas = mezclarPreguntas(bancoTemas[materia][topico]);
+    estadoTrivia[userId] = {
+      nombre,
+      materia,
+      topico,
+      index: 0,
+      puntaje: 0,
+      preguntas
+    };
     usuariosActivos.set(userId, true);
-    registrarHistorial(userId, nombre, `Inició quiz de ${tema}`);
+    registrarHistorial(userId, nombre, `Inició quiz: ${materia}/${topico}`);
     enviarPregunta(userId);
     bot.answerCallbackQuery(cb.id);
   }
 
   if (data.startsWith('r:')) {
-    const [, idx, sel] = data.split(':').map(Number);
+    const [, indexStr, seleccionStr] = data.split(':');
+    const userId = cb.message.chat.id;
     const estado = estadoTrivia[userId];
-    if (!estado || idx !== estado.index) return;
+    if (!estado) return;
 
-    const pregunta = estado.preguntas[idx];
+    const pregunta = estado.preguntas[estado.index];
     const correcta = pregunta.correcta;
-    if (sel === correcta) {
-      estado.puntaje++;
-      bot.sendMessage(userId, '✅ ¡Correcto!');
-    } else {
-      bot.sendMessage(userId, `❌ Incorrecto. Respuesta: ${pregunta.opciones[correcta]}`);
-    }
+    const seleccion = parseInt(seleccionStr);
+
+    if (seleccion === correcta) estado.puntaje++;
 
     estado.index++;
-    enviarPregunta(userId);
-    bot.answerCallbackQuery(cb.id);
-  }
-
-  if (data.startsWith('ranking:')) {
-    const tema = data.split(':')[1];
-    const puntajes = leerJSON(RUTA_PUNTAJES);
-    const filtrados = Object.values(puntajes).flatMap(u => u[tema] ? [{ nombre: u[tema].nombre, puntaje: u[tema].puntaje }] : []);
-    if (filtrados.length === 0) return enviarConReintento(userId, `❌ Sin registros para ${tema}`);
-    const lista = filtrados.sort((a, b) => b.puntaje - a.puntaje).map((p, i) => `${i + 1}. ${p.nombre}: ${p.puntaje}`).join('\n');
-    enviarConReintento(userId, `🏆 Ranking de *${tema}*:\n\n${lista}`, { parse_mode: 'Markdown' });
-    bot.answerCallbackQuery(cb.id);
-  }
-
-  if (data.startsWith('minota:')) {
-    const tema = data.split(':')[1];
-    const puntajes = leerJSON(RUTA_PUNTAJES);
-    const p = puntajes[userId] && puntajes[userId][tema];
-    if (!p) return enviarConReintento(userId, `❌ No tienes nota registrada para ${tema}.`);
-    const porcentaje = Math.round((p.puntaje / p.total) * 100);
-    let mensaje = `📊 Tu resultado en ${tema}:
-- Correctas: ${p.puntaje}/${p.total}
-- Aciertos: ${porcentaje}%`;
-    if (porcentaje === 100) mensaje += `\n🌟 ¡Excelente!`;
-    else if (porcentaje >= 70) mensaje += `\n👍 Buen trabajo.`;
-    else mensaje += `\n⚠️ Puedes mejorar.`;
-    enviarConReintento(userId, mensaje);
+    if (estado.index < estado.preguntas.length) {
+      enviarPregunta(userId);
+    } else {
+      const nota = (estado.puntaje / estado.preguntas.length * 5).toFixed(2);
+      const puntajes = leerJSON(RUTA_PUNTAJES);
+      if (!puntajes[userId]) puntajes[userId] = {};
+      puntajes[userId][`${estado.materia}/${estado.topico}`] = nota;
+      guardarJSON(RUTA_PUNTAJES, puntajes);
+      registrarHistorial(userId, estado.nombre, `Finalizó quiz con nota: ${nota}`);
+      usuariosActivos.delete(userId);
+      delete estadoTrivia[userId];
+      enviarConReintento(userId, `✅ Has terminado el quiz.
+📊 Tu nota es: *${nota}*`, { parse_mode: 'Markdown' });
+    }
     bot.answerCallbackQuery(cb.id);
   }
 });
 
 function enviarPregunta(userId) {
   const estado = estadoTrivia[userId];
-  if (!estado || estado.index >= estado.preguntas.length) return finalizarQuiz(userId);
+  if (!estado || estado.index >= estado.preguntas.length) return;
   const p = estado.preguntas[estado.index];
   const opciones = p.opciones.map((op, i) => [{ text: op, callback_data: `r:${estado.index}:${i}` }]);
   const actual = estado.index + 1;
   const total = estado.preguntas.length;
-  bot.sendMessage(userId, `⏳ 30 segundos...\n\n📘 Pregunta ${actual} de ${total}\n\n❓ ${p.pregunta}`, {
-  reply_markup: { inline_keyboard: opciones }
-  }).then(msg => iniciarCuentaRegresiva(userId, msg.message_id, p.pregunta, opciones));
-}
+  bot.sendMessage(userId, `📘 Pregunta ${actual}/${total}
 
-function iniciarCuentaRegresiva(userId, messageId, texto, opciones) {
-  // Si ya hay un temporizador activo, lo limpiamos
-  if (temporizadoresActivos[userId]) {
-    clearInterval(temporizadoresActivos[userId]);
-  }
-
-  let tiempo = 30;
-  const intervalo = setInterval(async () => {
-    tiempo--;
-
-    const estado = estadoTrivia[userId];
-    if (!estado || estado.index >= estado.preguntas.length) {
-      clearInterval(intervalo);
-      delete temporizadoresActivos[userId];
-      return;
-    }
-
-    if (tiempo <= 0) {
-      clearInterval(intervalo);
-      delete temporizadoresActivos[userId];
-      await enviarConReintento(userId, '⌛ Tiempo agotado.');
-      estado.index++;
-      await new Promise(res => setTimeout(res, 1500));
-      enviarPregunta(userId);
-      return;
-    }
-
-    const actual = estado.index + 1;
-    const total = estado.preguntas.length;
-    bot.editMessageText(`⏳ ${tiempo} segundos restantes\n\n📘 Pregunta ${actual} de ${total}\n\n❓ ${texto}`, {
-    chat_id: userId,
-    message_id: messageId,
+❓ ${p.pregunta}`, {
     reply_markup: { inline_keyboard: opciones }
-    }).catch(() => {});
-  }, 1000);
-
-  temporizadoresActivos[userId] = intervalo;
+  });
 }
 
-function finalizarQuiz(userId) {
-  const estado = estadoTrivia[userId];
+bot.onText(/\/minota/, (msg) => {
+  const userId = msg.chat.id;
   const puntajes = leerJSON(RUTA_PUNTAJES);
-  const userKey = String(userId);
-  if (!puntajes[userKey]) puntajes[userKey] = {};
-  puntajes[userKey][estado.tema] = {
-    nombre: estado.nombre,
-    puntaje: estado.puntaje,
-    total: estado.preguntas.length
-  };
-  guardarJSON(RUTA_PUNTAJES, puntajes);
-  const porcentaje = Math.round((estado.puntaje / estado.preguntas.length) * 100);
-  let mensaje = `🎉 Quiz finalizado: ${estado.tema}\n\n📊 Total: ${estado.preguntas.length}\n✅ Correctas: ${estado.puntaje}\n📈 Acierto: ${porcentaje}%`;
-  if (porcentaje === 100) mensaje += `\n🌟 ¡Excelente!`;
-  else if (porcentaje >= 70) mensaje += `\n👍 Buen trabajo.`;
-  else mensaje += `\n⚠️ Puedes mejorar.`;
-  enviarConReintento(userId, mensaje);
-  usuariosActivos.delete(userId);
-  delete estadoTrivia[userId];
-  if (temporizadoresActivos[userId]) {
-    clearInterval(temporizadoresActivos[userId]);
-    delete temporizadoresActivos[userId];
+  const notas = puntajes[userId];
+  if (!notas) return enviarConReintento(userId, '📭 No hay notas registradas.');
+  let resumen = '📋 Tus notas:
+';
+  for (const [clave, nota] of Object.entries(notas)) {
+    resumen += `📚 ${clave}: ${nota}
+`;
   }
-}
+  enviarConReintento(userId, resumen);
+});
 
 bot.onText(/\/ranking/, (msg) => {
-  const temas = Object.keys(bancoTemas);
-  if (temas.length === 0) return enviarConReintento(msg.chat.id, '⚠️ No hay temáticas.');
-  const botones = temas.map(t => ([{ text: t, callback_data: `ranking:${t}` }]));
-  enviarConReintento(msg.chat.id, '📈 Elige temática para ver ranking:', {
-    reply_markup: { inline_keyboard: botones }
-  });
+  const puntajes = leerJSON(RUTA_PUNTAJES);
+  let acumulado = {};
+  for (const [userId, topicos] of Object.entries(puntajes)) {
+    for (const [tema, nota] of Object.entries(topicos)) {
+      if (!acumulado[tema]) acumulado[tema] = [];
+      acumulado[tema].push({ userId, nota: parseFloat(nota) });
+    }
+  }
+  let mensaje = '🏆 Ranking por tema:
+';
+  for (const [tema, lista] of Object.entries(acumulado)) {
+    const top = lista.sort((a, b) => b.nota - a.nota).slice(0, 3);
+    mensaje += `
+📚 ${tema}
+`;
+    top.forEach((e, i) => {
+      mensaje += ` ${i + 1}. ID ${e.userId} - ${e.nota}
+`;
+    });
+  }
+  enviarConReintento(msg.chat.id, mensaje);
 });
 
 bot.onText(/\/activos/, (msg) => {
   if (msg.chat.id !== adminPermitido) return enviarConReintento(msg.chat.id, '🚫 Solo el profesor puede usar este comando.');
   if (usuariosActivos.size === 0) return enviarConReintento(msg.chat.id, '📭 No hay estudiantes activos.');
+
   let conteoPorTema = {}, lista = '';
   for (const [userId] of usuariosActivos.entries()) {
     const estado = estadoTrivia[userId];
     if (!estado) continue;
-    const { nombre, tema } = estado;
-    lista += `- ${nombre} (${tema})\n`;
-    conteoPorTema[tema] = (conteoPorTema[tema] || 0) + 1;
+    const { nombre, materia, topico, index, preguntas } = estado;
+    const clave = `${materia} / ${topico}`;
+    lista += `- ${nombre} (${clave}) Pregunta ${index + 1}/${preguntas.length}
+`;
+    conteoPorTema[clave] = (conteoPorTema[clave] || 0) + 1;
   }
-  let resumen = `👥 Estudiantes activos: ${usuariosActivos.size}\n\n`;
+
+  let resumen = `👥 Estudiantes activos: ${usuariosActivos.size}
+
+`;
   for (const [tema, cantidad] of Object.entries(conteoPorTema)) {
-    resumen += `📚 ${tema}: ${cantidad}\n`;
+    resumen += `📚 ${tema}: ${cantidad}
+`;
   }
-  resumen += `\n📝 Lista:\n${lista}`;
+  resumen += `
+📝 Lista:
+${lista}`;
   enviarConReintento(msg.chat.id, resumen);
 });
 
@@ -330,15 +281,23 @@ bot.onText(/\/terminar/, (msg) => {
     return enviarConReintento(userId, '⚠️ No estás presentando ningún quiz actualmente.');
   }
 
-  // Detener temporizador si existe
   if (temporizadoresActivos[userId]) {
     clearInterval(temporizadoresActivos[userId]);
     delete temporizadoresActivos[userId];
   }
 
-  // Eliminar estado del quiz y remover de usuarios activos
   delete estadoTrivia[userId];
   usuariosActivos.delete(userId);
 
   enviarConReintento(userId, '🛑 Has terminado voluntariamente tu quiz. Puedes volver a intentarlo desde /temas cuando lo desees.');
+});
+
+bot.onText(/\/historial/, (msg) => {
+  const userId = String(msg.chat.id);
+  const historial = leerJSON(RUTA_HISTORIAL);
+  const registros = historial[userId];
+  if (!registros || registros.length === 0) return enviarConReintento(msg.chat.id, '📭 No hay historial registrado.');
+
+  const resumen = registros.map(r => `🕒 ${r.hora}\n👤 ${r.nombre}\n📌 ${r.accion}`).join('\n\n');
+  enviarConReintento(msg.chat.id, `📜 Tu historial:\n\n${resumen}`);
 });
