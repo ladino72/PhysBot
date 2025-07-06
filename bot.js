@@ -31,314 +31,131 @@ app.listen(port, () => {
 
 
 
-const adminPermitido = 8136071960;
-const RUTA_PUNTAJES = path.join(__dirname, 'puntajes.json');
-const RUTA_PREGUNTAS = path.join(__dirname, 'preguntas.json');
-const RUTA_HISTORIAL = path.join(__dirname, 'historial.json');
-const RUTA_ESTADO_CURSO = path.join(__dirname, 'estado_curso.json');
-const temporizadoresActivos = {};
+// Archivos
+const preguntas = JSON.parse(fs.readFileSync('preguntas.json', 'utf8'));
+const puntajesPath = 'puntajes.json';
 
-function leerJSON(ruta) {
-  try {
-    if (!fs.existsSync(ruta)) return {};
-    return JSON.parse(fs.readFileSync(ruta, 'utf8'));
-  } catch (err) {
-    console.error(`❌ Error leyendo ${ruta}:`, err.message);
-    return {};
-  }
+// Funciones de puntaje
+function cargarPuntajes() {
+  if (!fs.existsSync(puntajesPath)) return {};
+  return JSON.parse(fs.readFileSync(puntajesPath, 'utf8'));
 }
 
-function guardarJSON(ruta, datos) {
-  try {
-    fs.writeFileSync(ruta, JSON.stringify(datos, null, 2));
-  } catch (err) {
-    console.error(`❌ Error guardando en ${ruta}:`, err);
-  }
+function guardarPuntajes(puntajes) {
+  fs.writeFileSync(puntajesPath, JSON.stringify(puntajes, null, 2));
 }
 
-function cursoActivo() {
-  const estado = leerJSON(RUTA_ESTADO_CURSO);
-  return estado.activo !== false;
-}
+// Menú de materias
+function sendMateriasMenu(chatId) {
+  const materias = Object.keys(preguntas);
+  const botones = materias.map(m => [{ text: m, callback_data: `materia_${m}` }]);
 
-function setCursoActivo(activo) {
-  guardarJSON(RUTA_ESTADO_CURSO, { activo });
-}
-
-function enviarConReintento(chatId, texto, opciones = {}) {
-  const reintentar = (delay) => new Promise(resolve => setTimeout(resolve, delay));
-  const intentar = async (retraso = 1000) => {
-    try {
-      return await bot.sendMessage(chatId, texto, opciones);
-    } catch (err) {
-      if (err.response && err.response.statusCode === 429) {
-        const wait = err.response.body.parameters.retry_after * 1000 || retraso;
-        console.warn(`⚠️ Esperando ${wait / 1000}s por límite de rate...`);
-        await reintentar(wait);
-        return intentar(wait);
-      } else {
-        console.error('❌ Error al enviar mensaje:', err);
-      }
-    }
-  };
-  return intentar();
-}
-
-function registrarHistorial(userId, nombre, accion) {
-  const historial = leerJSON(RUTA_HISTORIAL);
-  const ahora = new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' });
-  if (!historial[userId]) historial[userId] = [];
-  historial[userId].push({ nombre, accion, hora: ahora });
-  guardarJSON(RUTA_HISTORIAL, historial);
-}
-
-let bancoTemas = leerJSON(RUTA_PREGUNTAS);
-function mezclarPreguntas(lista) {
-  const copia = [...lista];
-  for (let i = copia.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copia[i], copia[j]] = [copia[j], copia[i]];
-  }
-  return copia;
-}
-
-let estadoTrivia = {};
-let usuariosActivos = new Map();
-const LIMITE_USUARIOS_CONCURRENTES = 30;
-
-bot.onText(/\/activar/, (msg) => {
-  if (msg.chat.id !== adminPermitido) return enviarConReintento(msg.chat.id, '🚫 Solo el profesor puede usar este comando.');
-  setCursoActivo(true);
-  enviarConReintento(msg.chat.id, '✅ Curso activado.');
-});
-
-bot.onText(/\/desactivar/, (msg) => {
-  if (msg.chat.id !== adminPermitido) return enviarConReintento(msg.chat.id, '🚫 Solo el profesor puede usar este comando.');
-  setCursoActivo(false);
-  enviarConReintento(msg.chat.id, '⛔ Curso desactivado.');
-});
-
-bot.onText(/\/start/, (msg) => {
-  enviarConReintento(
-    msg.chat.id,
-    '👋 ¡Bienvenido a PhysicsBank!\n' +
-    '📚 Usa /temas para elegir una temática.\n' +
-    '📈 Usa /ranking para ver el ranking.\n' +
-    '📝 Usa /minota para ver tu resultado.\n' +
-    '🛑 Usa /terminar para abandonar el quiz actual.\n' +
-    '👥 Usa /activos para ver quiénes están resolviendo quizzes.'
-  );
-});
-
-bot.onText(/\/temas/, (msg) => {
-  if (!cursoActivo()) return enviarConReintento(msg.chat.id, '⛔ El curso está desactivado.');
-  const temas = Object.keys(bancoTemas);
-  if (temas.length === 0) return enviarConReintento(msg.chat.id, '⚠️ No hay temáticas disponibles.');
-  const botones = temas.map(t => ([{ text: t, callback_data: `tema:${t}` }]));
-  enviarConReintento(msg.chat.id, '📚 Elige una temática para comenzar:', {
+  bot.sendMessage(chatId, '📘 Elige una materia:', {
     reply_markup: { inline_keyboard: botones }
   });
-});
-
-bot.onText(/\/minota/, (msg) => {
-  const puntajes = leerJSON(RUTA_PUNTAJES);
-  const userId = String(msg.chat.id);
-  const usuarioNotas = puntajes[userId];
-  //console.log(`🔍 Notas del usuario ${userId}:`, usuarioNotas);  //
-  if (!usuarioNotas) return enviarConReintento(msg.chat.id, '❌ No tienes nota registrada.');
-  const botones = Object.entries(usuarioNotas).map(([tema, nota]) => ([{
-    text: `${tema} (${nota.puntaje}/${nota.total})`, callback_data: `minota:${tema}`
-  }]));
-  enviarConReintento(msg.chat.id, '🧪 Elige temática para ver tu nota:', {
-    reply_markup: { inline_keyboard: botones }
-  });
-});
-
-bot.on('callback_query', (cb) => {
-  const userId = cb.message.chat.id;
-  const data = cb.data;
-  const nombre = cb.from.first_name;
-
-  if (data.startsWith('tema:')) {
-    const tema = data.split(':')[1];
-    if (!bancoTemas[tema]) return enviarConReintento(userId, '❌ Temática inválida.');
-    if (usuariosActivos.size >= LIMITE_USUARIOS_CONCURRENTES) return enviarConReintento(userId, '🚫 Límite de usuarios alcanzado.');
-
-    const preguntas = mezclarPreguntas(bancoTemas[tema]);
-    estadoTrivia[userId] = { nombre, index: 0, puntaje: 0, preguntas, tema };
-    usuariosActivos.set(userId, true);
-    registrarHistorial(userId, nombre, `Inició quiz de ${tema}`);
-    enviarPregunta(userId);
-    bot.answerCallbackQuery(cb.id);
-  }
-
-  if (data.startsWith('r:')) {
-    const [, idx, sel] = data.split(':').map(Number);
-    const estado = estadoTrivia[userId];
-    if (!estado || idx !== estado.index) return;
-
-    const pregunta = estado.preguntas[idx];
-    const correcta = pregunta.correcta;
-    if (sel === correcta) {
-      estado.puntaje++;
-      bot.sendMessage(userId, '✅ ¡Correcto!');
-    } else {
-      bot.sendMessage(userId, `❌ Incorrecto. Respuesta: ${pregunta.opciones[correcta]}`);
-    }
-
-    estado.index++;
-    enviarPregunta(userId);
-    bot.answerCallbackQuery(cb.id);
-  }
-
-  if (data.startsWith('ranking:')) {
-    const tema = data.split(':')[1];
-    const puntajes = leerJSON(RUTA_PUNTAJES);
-    const filtrados = Object.values(puntajes).flatMap(u => u[tema] ? [{ nombre: u[tema].nombre, puntaje: u[tema].puntaje }] : []);
-    if (filtrados.length === 0) return enviarConReintento(userId, `❌ Sin registros para ${tema}`);
-    const lista = filtrados.sort((a, b) => b.puntaje - a.puntaje).map((p, i) => `${i + 1}. ${p.nombre}: ${p.puntaje}`).join('\n');
-    enviarConReintento(userId, `🏆 Ranking de *${tema}*:\n\n${lista}`, { parse_mode: 'Markdown' });
-    bot.answerCallbackQuery(cb.id);
-  }
-
-  if (data.startsWith('minota:')) {
-    const tema = data.split(':')[1];
-    const puntajes = leerJSON(RUTA_PUNTAJES);
-    const p = puntajes[userId] && puntajes[userId][tema];
-    if (!p) return enviarConReintento(userId, `❌ No tienes nota registrada para ${tema}.`);
-    const porcentaje = Math.round((p.puntaje / p.total) * 100);
-    let mensaje = `📊 Tu resultado en ${tema}:
-- Correctas: ${p.puntaje}/${p.total}
-- Aciertos: ${porcentaje}%`;
-    if (porcentaje === 100) mensaje += `\n🌟 ¡Excelente!`;
-    else if (porcentaje >= 70) mensaje += `\n👍 Buen trabajo.`;
-    else mensaje += `\n⚠️ Puedes mejorar.`;
-    enviarConReintento(userId, mensaje);
-    bot.answerCallbackQuery(cb.id);
-  }
-});
-
-function enviarPregunta(userId) {
-  const estado = estadoTrivia[userId];
-  if (!estado || estado.index >= estado.preguntas.length) return finalizarQuiz(userId);
-  const p = estado.preguntas[estado.index];
-  const opciones = p.opciones.map((op, i) => [{ text: op, callback_data: `r:${estado.index}:${i}` }]);
-  const actual = estado.index + 1;
-  const total = estado.preguntas.length;
-  bot.sendMessage(userId, `⏳ 30 segundos...\n\n📘 Pregunta ${actual} de ${total}\n\n❓ ${p.pregunta}`, {
-  reply_markup: { inline_keyboard: opciones }
-  }).then(msg => iniciarCuentaRegresiva(userId, msg.message_id, p.pregunta, opciones));
 }
 
-function iniciarCuentaRegresiva(userId, messageId, texto, opciones) {
-  // Si ya hay un temporizador activo, lo limpiamos
-  if (temporizadoresActivos[userId]) {
-    clearInterval(temporizadoresActivos[userId]);
+// Menú de temas (por materia)
+function sendTemasMenu(chatId, materia) {
+  const temas = Object.keys(preguntas[materia]);
+  const botones = temas.map(t => [{
+    text: t,
+    callback_data: `tema_${materia}_${t}`
+  }]);
+
+  botones.push([{ text: '⏪ Volver a materias', callback_data: 'volver_materias' }]);
+
+  bot.sendMessage(chatId, `📚 Temas de *${materia}*:`, {
+    parse_mode: 'Markdown',
+    reply_markup: { inline_keyboard: botones }
+  });
+}
+
+// Mostrar pregunta por índice
+function sendPregunta(chatId, materia, tema, index = 0) {
+  const lista = preguntas[materia][tema];
+  if (!lista || !lista[index]) {
+    return bot.sendMessage(chatId, '❌ No hay más preguntas.');
   }
 
-  let tiempo = 30;
-  const intervalo = setInterval(async () => {
-    tiempo--;
+  const q = lista[index];
+  const opciones = q.opciones.map((op, i) => [{
+    text: op,
+    callback_data: `respuesta_${materia}_${tema}_${index}_${i}`
+  }]);
 
-    const estado = estadoTrivia[userId];
-    if (!estado || estado.index >= estado.preguntas.length) {
-      clearInterval(intervalo);
-      delete temporizadoresActivos[userId];
-      return;
-    }
-
-    if (tiempo <= 0) {
-      clearInterval(intervalo);
-      delete temporizadoresActivos[userId];
-      await enviarConReintento(userId, '⌛ Tiempo agotado.');
-      estado.index++;
-      await new Promise(res => setTimeout(res, 1500));
-      enviarPregunta(userId);
-      return;
-    }
-
-    const actual = estado.index + 1;
-    const total = estado.preguntas.length;
-    bot.editMessageText(`⏳ ${tiempo} segundos restantes\n\n📘 Pregunta ${actual} de ${total}\n\n❓ ${texto}`, {
-    chat_id: userId,
-    message_id: messageId,
+  bot.sendMessage(chatId, `❓ *${q.pregunta}*`, {
+    parse_mode: 'Markdown',
     reply_markup: { inline_keyboard: opciones }
-    }).catch(() => {});
-  }, 1000);
-
-  temporizadoresActivos[userId] = intervalo;
-}
-
-function finalizarQuiz(userId) {
-  const estado = estadoTrivia[userId];
-  const puntajes = leerJSON(RUTA_PUNTAJES);
-  const userKey = String(userId);
-  if (!puntajes[userKey]) puntajes[userKey] = {};
-  puntajes[userKey][estado.tema] = {
-    nombre: estado.nombre,
-    puntaje: estado.puntaje,
-    total: estado.preguntas.length
-  };
-  guardarJSON(RUTA_PUNTAJES, puntajes);
-  const porcentaje = Math.round((estado.puntaje / estado.preguntas.length) * 100);
-  let mensaje = `🎉 Quiz finalizado: ${estado.tema}\n\n📊 Total: ${estado.preguntas.length}\n✅ Correctas: ${estado.puntaje}\n📈 Acierto: ${porcentaje}%`;
-  if (porcentaje === 100) mensaje += `\n🌟 ¡Excelente!`;
-  else if (porcentaje >= 70) mensaje += `\n👍 Buen trabajo.`;
-  else mensaje += `\n⚠️ Puedes mejorar.`;
-  enviarConReintento(userId, mensaje);
-  usuariosActivos.delete(userId);
-  delete estadoTrivia[userId];
-  if (temporizadoresActivos[userId]) {
-    clearInterval(temporizadoresActivos[userId]);
-    delete temporizadoresActivos[userId];
-  }
-}
-
-bot.onText(/\/ranking/, (msg) => {
-  const temas = Object.keys(bancoTemas);
-  if (temas.length === 0) return enviarConReintento(msg.chat.id, '⚠️ No hay temáticas.');
-  const botones = temas.map(t => ([{ text: t, callback_data: `ranking:${t}` }]));
-  enviarConReintento(msg.chat.id, '📈 Elige temática para ver ranking:', {
-    reply_markup: { inline_keyboard: botones }
   });
+}
+
+// /start
+bot.onText(/\/start/, (msg) => {
+  sendMateriasMenu(msg.chat.id);
 });
 
-bot.onText(/\/activos/, (msg) => {
-  if (msg.chat.id !== adminPermitido) return enviarConReintento(msg.chat.id, '🚫 Solo el profesor puede usar este comando.');
-  if (usuariosActivos.size === 0) return enviarConReintento(msg.chat.id, '📭 No hay estudiantes activos.');
-  let conteoPorTema = {}, lista = '';
-  for (const [userId] of usuariosActivos.entries()) {
-    const estado = estadoTrivia[userId];
-    if (!estado) continue;
-    const { nombre, tema } = estado;
-    lista += `- ${nombre} (${tema})\n`;
-    conteoPorTema[tema] = (conteoPorTema[tema] || 0) + 1;
-  }
-  let resumen = `👥 Estudiantes activos: ${usuariosActivos.size}\n\n`;
-  for (const [tema, cantidad] of Object.entries(conteoPorTema)) {
-    resumen += `📚 ${tema}: ${cantidad}\n`;
-  }
-  resumen += `\n📝 Lista:\n${lista}`;
-  enviarConReintento(msg.chat.id, resumen);
-});
+// Respuestas a botones
+bot.on('callback_query', (query) => {
+  const chatId = query.message.chat.id;
+  const userId = query.from.id.toString();
+  const data = query.data;
 
-bot.onText(/\/terminar/, (msg) => {
-  const userId = msg.chat.id;
-  const estado = estadoTrivia[userId];
-
-  if (!estado) {
-    return enviarConReintento(userId, '⚠️ No estás presentando ningún quiz actualmente.');
+  if (data === 'volver_materias') {
+    return sendMateriasMenu(chatId);
   }
 
-  // Detener temporizador si existe
-  if (temporizadoresActivos[userId]) {
-    clearInterval(temporizadoresActivos[userId]);
-    delete temporizadoresActivos[userId];
+  if (data.startsWith('materia_')) {
+    const materia = data.split('_')[1];
+    return sendTemasMenu(chatId, materia);
   }
 
-  // Eliminar estado del quiz y remover de usuarios activos
-  delete estadoTrivia[userId];
-  usuariosActivos.delete(userId);
+  if (data.startsWith('tema_')) {
+    const [, materia, tema] = data.split('_');
+    return sendPregunta(chatId, materia, tema, 0);
+  }
 
-  enviarConReintento(userId, '🛑 Has terminado voluntariamente tu quiz. Puedes volver a intentarlo desde /temas cuando lo desees.');
+  if (data.startsWith('respuesta_')) {
+    const [, materia, tema, indexStr, opcionStr] = data.split('_');
+    const index = parseInt(indexStr);
+    const opcion = parseInt(opcionStr);
+    const q = preguntas[materia][tema][index];
+
+    const correcta = q.correcta;
+
+    // Cargar y actualizar puntajes
+    const puntajes = cargarPuntajes();
+    if (!puntajes[userId]) puntajes[userId] = {};
+    if (!puntajes[userId][materia]) puntajes[userId][materia] = {};
+    if (!puntajes[userId][materia][tema]) puntajes[userId][materia][tema] = 0;
+
+    if (opcion === correcta) {
+      bot.sendMessage(chatId, '✅ ¡Correcto!');
+      puntajes[userId][materia][tema] += 1;
+    } else {
+      bot.sendMessage(chatId, `❌ Incorrecto. La correcta era: *${q.opciones[correcta]}*`, {
+        parse_mode: 'Markdown'
+      });
+    }
+
+    guardarPuntajes(puntajes);
+
+    // Siguiente o fin
+    const siguiente = index + 1;
+    if (preguntas[materia][tema][siguiente]) {
+      sendPregunta(chatId, materia, tema, siguiente);
+    } else {
+      bot.sendMessage(chatId, `🎉 Has terminado el tema *${tema}* de *${materia}*.`, {
+        parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '🔙 Volver a Temas', callback_data: `materia_${materia}` }],
+            [{ text: '🏠 Volver a Materias', callback_data: 'volver_materias' }]
+          ]
+        }
+      });
+    }
+  }
+
+  bot.answerCallbackQuery(query.id);
 });
