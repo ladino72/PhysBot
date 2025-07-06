@@ -73,32 +73,35 @@ function sendTemasMenu(chatId, materia) {
 }
 
 // Mostrar pregunta
-function sendPregunta(chatId, materia, tema, index = 0, userId) {
-  const lista = preguntas[materia][tema];
-  if (!lista || !lista[index]) {
-    return bot.sendMessage(chatId, '❌ No hay más preguntas.');
-  }
+// 🕒 Mostrar cronómetro con barra de emojis
+bot.sendMessage(chatId, `⏳ Tiempo restante: 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`).then(timerMsg => {
+  estados[userId].mensajeTimerId = timerMsg.message_id;
+  estados[userId].tiempoRestante = 25;
 
-  const total = lista.length;
-  const q = lista[index];
+  estados[userId].interval = setInterval(() => {
+    estados[userId].tiempoRestante -= 1;
 
-  if (!estados[userId]) estados[userId] = {};
-  estados[userId].materia = materia;
-  estados[userId].tema = tema;
-  estados[userId].index = index;
-  estados[userId].respondido = false;
-
-  // Cancelar temporizadores anteriores
-  if (estados[userId].timer) clearTimeout(estados[userId].timer);
-  if (estados[userId].interval) clearInterval(estados[userId].interval);
-
-  // ⏲️ Temporizador para evaluar tras 25s
-  estados[userId].timer = setTimeout(() => {
-    if (!estados[userId].respondido) {
-      bot.sendMessage(chatId, `⏱️ Tiempo agotado para la pregunta ${index + 1} de ${total}. Se considera incorrecta.`);
-      procesarRespuesta(chatId, userId, materia, tema, index, -1);
+    const restantes = estados[userId].tiempoRestante;
+    if (restantes <= 0) {
+      clearInterval(estados[userId].interval);
+      return;
     }
-  }, 25000);
+
+    const total = 25;
+    const filled = '🔵'.repeat(restantes);
+    const empty = '⚪'.repeat(total - restantes);
+    const barra = filled + empty;
+
+    bot.editMessageText(
+      `⏳ Tiempo restante: ${barra} (${restantes}s)`,
+      {
+        chat_id: chatId,
+        message_id: estados[userId].mensajeTimerId
+      }
+    ).catch(() => {});
+  }, 1000);
+});
+
 
   // 🕒 Mostrar cronómetro y actualizarlo cada segundo
   bot.sendMessage(chatId, `⏳ Tiempo restante: 25 segundos`).then(timerMsg => {
@@ -236,4 +239,24 @@ bot.on('callback_query', (query) => {
   }
 
   bot.answerCallbackQuery(query.id);
+});
+
+bot.onText(/\/parar/, (msg) => {
+  const userId = msg.from.id.toString();
+  const chatId = msg.chat.id;
+
+  if (!estados[userId]) {
+    return bot.sendMessage(chatId, 'ℹ️ No tienes un quiz en curso.');
+  }
+
+  if (estados[userId].timer) clearTimeout(estados[userId].timer);
+  if (estados[userId].interval) clearInterval(estados[userId].interval);
+
+  if (estados[userId].mensajeTimerId) {
+    bot.deleteMessage(chatId, estados[userId].mensajeTimerId).catch(() => {});
+  }
+
+  delete estados[userId];
+
+  bot.sendMessage(chatId, '🛑 Has detenido el quiz. Puedes volver a empezar cuando quieras con otro tema.');
 });
