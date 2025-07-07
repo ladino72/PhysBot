@@ -296,4 +296,5 @@ bot.on('callback_query', (query) => {
   }
 
   bot.answerCallbackQuery(query.id);
-});
+})
+};
