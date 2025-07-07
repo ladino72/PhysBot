@@ -36,6 +36,17 @@ const preguntas = JSON.parse(fs.readFileSync('preguntas.json', 'utf8'));
 const puntajesPath = 'puntajes.json';
 const estados = {}; // Almacena temporales por usuario
 
+const usuariosPath = 'usuarios.json';
+
+function cargarUsuarios() {
+  if (!fs.existsSync(usuariosPath)) return {};
+  return JSON.parse(fs.readFileSync(usuariosPath, 'utf8'));
+}
+
+function guardarUsuarios(data) {
+  fs.writeFileSync(usuariosPath, JSON.stringify(data, null, 2));
+}
+
 function cargarPuntajes() {
   if (!fs.existsSync(puntajesPath)) return {};
   return JSON.parse(fs.readFileSync(puntajesPath, 'utf8'));
@@ -152,18 +163,6 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
 // Evaluar respuesta
 function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
 
-  const usuariosPath = 'usuarios.json';
-
-  function cargarUsuarios() {
-    if (!fs.existsSync(usuariosPath)) return {};
-    return JSON.parse(fs.readFileSync(usuariosPath, 'utf8'));
-  }
-
-  function guardarUsuarios(data) {
-    fs.writeFileSync(usuariosPath, JSON.stringify(data, null, 2));
-  }
-
-  // ... dentro de procesarRespuesta()
   const usuarios = cargarUsuarios();
   if (!usuarios[userId]) {
     usuarios[userId] = {
