@@ -119,7 +119,8 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
   estados[userId].timer = setTimeout(() => {
     if (!estados[userId].respondido) {
       bot.sendMessage(chatId, `⏱️ Tiempo agotado para la pregunta ${index + 1} de ${total}. Se considera incorrecta.`);
-      procesarRespuesta(chatId, userId, materia, tema, index, -1);
+      procesarRespuesta(chatId, userId, materia, tema, index, opcion, query.from);
+
     }
   }, 25000);
 
@@ -161,16 +162,16 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
 
 
 // Evaluar respuesta
-function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
+function procesarRespuesta(chatId, userId, materia, tema, index, opcion, fromUser){
 
   const usuarios = cargarUsuarios();
-  if (!usuarios[userId]) {
-    usuarios[userId] = {
-      nombre: query?.from?.first_name || `Usuario ${userId}`,
-      username: query?.from?.username || ''
-    };
-    guardarUsuarios(usuarios);
-  }
+ if (!usuarios[userId]) {
+  usuarios[userId] = {
+    nombre: fromUser?.first_name || `Usuario ${userId}`,
+    username: fromUser?.username || ''
+  };
+  guardarUsuarios(usuarios);
+ }
 
   if (estados[userId]?.respondido) return;
   estados[userId].respondido = true;
@@ -266,7 +267,8 @@ bot.on('callback_query', (query) => {
     const [, materia, tema, indexStr, opcionStr] = data.split('_');
     const index = parseInt(indexStr);
     const opcion = parseInt(opcionStr);
-    procesarRespuesta(chatId, userId, materia, tema, index, opcion);
+    procesarRespuesta(chatId, userId, materia, tema, index, opcion, query.from);
+
   }
 
   if (data.startsWith('ver_mi_nota_')) {
