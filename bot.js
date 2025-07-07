@@ -31,6 +31,9 @@ app.listen(port, () => {
 //---------------------------------------------
 
 
+let tomaActiva = true; // Por defecto está activa
+const ADMIN_ID = '8136071960';  
+
 
 const preguntas = JSON.parse(fs.readFileSync('preguntas.json', 'utf8'));
 const puntajesPath = 'puntajes.json';
@@ -224,6 +227,20 @@ function procesarRespuesta(chatId, userId, materia, tema, index, opcion, fromUse
 
 // /start
 bot.onText(/\/start/, (msg) => {
+  const userId = msg.from.id.toString();
+
+  // Verifica si la toma está desactivada
+  if (!tomaActiva) {
+    return bot.sendMessage(msg.chat.id, '⛔ La toma del quiz está desactivada en este momento. Intenta más tarde.');
+  }
+
+  // Guardar nombre del usuario si no existe
+  if (!estados[userId]) {
+    estados[userId] = {
+      nombre: `${msg.from.first_name} ${msg.from.last_name || ''}`.trim()
+    };
+  }
+
   sendMateriasMenu(msg.chat.id);
 });
 
@@ -358,3 +375,22 @@ function obtenerTotalDePreguntas(materia, tema) {
   const lista = preguntas[materia]?.[tema];
   return Array.isArray(lista) ? lista.length : 0;
 }
+
+
+bot.onText(/\/activar/, (msg) => {
+  if (msg.from.id.toString() !== ADMIN_ID) {
+    return bot.sendMessage(msg.chat.id, '⛔ No tienes permiso para ejecutar este comando.');
+  }
+
+  tomaActiva = true;
+  bot.sendMessage(msg.chat.id, '✅ La toma de quizzes ha sido ACTIVADA para los estudiantes.');
+});
+
+bot.onText(/\/desactivar/, (msg) => {
+  if (msg.from.id.toString() !== ADMIN_ID) {
+    return bot.sendMessage(msg.chat.id, '⛔ No tienes permiso para ejecutar este comando.');
+  }
+
+  tomaActiva = false;
+  bot.sendMessage(msg.chat.id, '🛑 La toma de quizzes ha sido DESACTIVADA para los estudiantes.');
+});
