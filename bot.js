@@ -235,5 +235,59 @@ bot.on('callback_query', (query) => {
     procesarRespuesta(chatId, userId, materia, tema, index, opcion);
   }
 
+  if (data.startsWith('ranking_')) {
+    const materia = data.split('_')[1];
+  
+    const temasDisponibles = Object.keys(preguntas[materia]);
+  
+    // Menú para elegir tema dentro del ranking
+    const botonesTemas = temasDisponibles.map(t => [{
+      text: t,
+      callback_data: `rankingtema_${materia}_${t}`
+    }]);
+  
+    botonesTemas.push([{ text: '⏪ Volver a Temas', callback_data: `materia_${materia}` }]);
+  
+    return bot.sendMessage(chatId, `📈 Elige un tema de *${materia}* para ver el ranking:`, {
+      parse_mode: 'Markdown',
+      reply_markup: { inline_keyboard: botonesTemas }
+    });
+  }
+
+  if (data.startsWith('rankingtema_')) {
+    const [, materia, tema] = data.split('_');
+    const puntajes = cargarPuntajes();
+  
+    const ranking = [];
+  
+    for (const userId in puntajes) {
+      const user = puntajes[userId];
+      const puntos = user[materia]?.[tema] ?? 0;
+      if (puntos > 0) {
+        ranking.push({ userId, puntos });
+      }
+    }
+  
+    if (ranking.length === 0) {
+      return bot.sendMessage(chatId, `📉 Aún no hay puntajes registrados para *${tema}* de *${materia}*.`, {
+        parse_mode: 'Markdown'
+      });
+    }
+  
+    // Ordenar de mayor a menor
+    ranking.sort((a, b) => b.puntos - a.puntos);
+  
+    // Mostrar top
+    let mensaje = `🏆 *Ranking: ${materia} / ${tema}*\n\n`;
+    ranking.forEach((entry, index) => {
+      const posicion = index + 1;
+      const nombre = entry.userId; // Podrías guardar nombres más adelante
+      mensaje += `${posicion}. Usuario ${nombre} — ${entry.puntos} punto(s)\n`;
+    });
+  
+    return bot.sendMessage(chatId, mensaje, { parse_mode: 'Markdown' });
+  }
+  
+
   bot.answerCallbackQuery(query.id);
 });
