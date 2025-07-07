@@ -151,6 +151,28 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
 
 // Evaluar respuesta
 function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
+
+  const usuariosPath = 'usuarios.json';
+
+  function cargarUsuarios() {
+    if (!fs.existsSync(usuariosPath)) return {};
+    return JSON.parse(fs.readFileSync(usuariosPath, 'utf8'));
+  }
+
+  function guardarUsuarios(data) {
+    fs.writeFileSync(usuariosPath, JSON.stringify(data, null, 2));
+  }
+
+  // ... dentro de procesarRespuesta()
+  const usuarios = cargarUsuarios();
+  if (!usuarios[userId]) {
+    usuarios[userId] = {
+      nombre: query?.from?.first_name || `Usuario ${userId}`,
+      username: query?.from?.username || ''
+    };
+    guardarUsuarios(usuarios);
+  }
+
   if (estados[userId]?.respondido) return;
   estados[userId].respondido = true;
 
@@ -198,6 +220,7 @@ function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
     delete estados[userId];
   }
 }
+
 
 // /start
 bot.onText(/\/start/, (msg) => {
@@ -260,12 +283,16 @@ bot.on('callback_query', (query) => {
   
     let resumen = `📊 *Tu Puntaje en ${materia}:*\n\n`;
     for (const tema in userData[materia]) {
-      const puntos = userData[materia][tema];
-      resumen += `   • ${tema}: ${puntos} punto(s)\n`;
+      const obtenidos = userData[materia][tema];
+      const total = obtenerTotalDePreguntas(materia, tema);
+      const porcentaje = total > 0 ? Math.round((obtenidos / total) * 100) : 0;
+  
+      resumen += `• ${tema}: ${obtenidos}/${total} puntos (${porcentaje}%)\n`;
     }
   
     return bot.sendMessage(chatId, resumen, { parse_mode: 'Markdown' });
   }
+  
   
 
   if (data.startsWith('ranking_')) {
@@ -290,14 +317,18 @@ bot.on('callback_query', (query) => {
   if (data.startsWith('rankingtema_')) {
     const [, materia, tema] = data.split('_');
     const puntajes = cargarPuntajes();
+    const usuarios = cargarUsuarios();
+    const total = obtenerTotalDePreguntas(materia, tema);
   
     const ranking = [];
   
-    for (const userId in puntajes) {
-      const user = puntajes[userId];
+    for (const uid in puntajes) {
+      const user = puntajes[uid];
       const puntos = user[materia]?.[tema] ?? 0;
       if (puntos > 0) {
-        ranking.push({ userId, puntos });
+        const porcentaje = total > 0 ? Math.round((puntos / total) * 100) : 0;
+        const nombre = usuarios[uid]?.nombre || `Usuario ${uid}`;
+        ranking.push({ nombre, puntos, porcentaje });
       }
     }
   
@@ -307,20 +338,22 @@ bot.on('callback_query', (query) => {
       });
     }
   
-    // Ordenar de mayor a menor
     ranking.sort((a, b) => b.puntos - a.puntos);
   
-    // Mostrar top
     let mensaje = `🏆 *Ranking: ${materia} / ${tema}*\n\n`;
     ranking.forEach((entry, index) => {
-      const posicion = index + 1;
-      const nombre = entry.userId; // Podrías guardar nombres más adelante
-      mensaje += `${posicion}. Usuario ${nombre} — ${entry.puntos} punto(s)\n`;
+      mensaje += `${index + 1}. ${entry.nombre}: ${entry.puntos}/${total} puntos (${entry.porcentaje}%)\n`;
     });
   
     return bot.sendMessage(chatId, mensaje, { parse_mode: 'Markdown' });
   }
   
+  
 
   bot.answerCallbackQuery(query.id);
 });
+
+function obtenerTotalDePreguntas(materia, tema) {
+  const lista = preguntas[materia]?.[tema];
+  return Array.isArray(lista) ? lista.length : 0;
+}
