@@ -64,13 +64,21 @@ function sendTemasMenu(chatId, materia) {
     text: t,
     callback_data: `tema_${materia}_${t}`
   }]);
-  botones.push([{ text: '⏪ Volver a materias', callback_data: 'volver_materias' }]);
+
+  botones.push([
+    { text: '📈 Ranking', callback_data: `ranking_${materia}` }
+  ]);
+
+  botones.push([
+    { text: '⏪ Volver a materias', callback_data: 'volver_materias' }
+  ]);
 
   bot.sendMessage(chatId, `📚 Temas de *${materia}*:`, {
     parse_mode: 'Markdown',
     reply_markup: { inline_keyboard: botones }
   });
 }
+
 
 // Mostrar pregunta
 function sendPregunta(chatId, materia, tema, index = 0, userId) {
