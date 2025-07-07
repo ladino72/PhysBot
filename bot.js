@@ -60,12 +60,15 @@ function sendMateriasMenu(chatId) {
 // Menú de temas
 function sendTemasMenu(chatId, materia) {
   const temas = Object.keys(preguntas[materia]);
+
   const botones = temas.map(t => [{
     text: t,
     callback_data: `tema_${materia}_${t}`
   }]);
 
+  // Agregamos ambas funciones
   botones.push([
+    { text: '📊 Ver mi nota', callback_data: `ver_mi_nota_${materia}` },
     { text: '📈 Ranking', callback_data: `ranking_${materia}` }
   ]);
 
@@ -78,6 +81,7 @@ function sendTemasMenu(chatId, materia) {
     reply_markup: { inline_keyboard: botones }
   });
 }
+
 
 
 // Mostrar pregunta
@@ -242,6 +246,27 @@ bot.on('callback_query', (query) => {
     const opcion = parseInt(opcionStr);
     procesarRespuesta(chatId, userId, materia, tema, index, opcion);
   }
+
+  if (data.startsWith('ver_mi_nota_')) {
+    const materia = data.split('_').slice(3).join('_');
+    const puntajes = cargarPuntajes();
+    const userData = puntajes[userId];
+  
+    if (!userData || !userData[materia]) {
+      return bot.sendMessage(chatId, `ℹ️ Aún no has respondido ningún tema en *${materia}*.`, {
+        parse_mode: 'Markdown'
+      });
+    }
+  
+    let resumen = `📊 *Tu Puntaje en ${materia}:*\n\n`;
+    for (const tema in userData[materia]) {
+      const puntos = userData[materia][tema];
+      resumen += `   • ${tema}: ${puntos} punto(s)\n`;
+    }
+  
+    return bot.sendMessage(chatId, resumen, { parse_mode: 'Markdown' });
+  }
+  
 
   if (data.startsWith('ranking_')) {
     const materia = data.split('_')[1];
