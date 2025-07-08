@@ -73,7 +73,8 @@ function sendTemasMenu(chatId, materia) {
 }
 
 // Mostrar pregunta
-function sendPregunta(chatId, materia, tema, index = 0, userId) {
+  async function sendPregunta(chatId, materia, tema, index = 0, userId) {
+
   const lista = preguntas[materia][tema];
   if (!lista || !lista[index]) {
     return bot.sendMessage(chatId, '❌ No hay más preguntas.');
@@ -82,7 +83,7 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
   const total = lista.length;
   const q = lista[index];
   if (index === 0) {
-    bot.sendMessage(chatId, 'ℹ️ Puedes escribir /terminar en cualquier momento para salir del quiz actual voluntariamente y puedes seguir en otro momento');
+    bot.sendMessage(chatId, 'ℹ️ Puedes escribir /terminar en cualquier momento para salir del quiz actual voluntariamente.');
   }
   
 
@@ -105,27 +106,28 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
   }, 25000);
 
   // 🕒 Mostrar cronómetro y actualizarlo cada segundo
-  bot.sendMessage(chatId, `⏳ Tiempo restante: 25 segundos`).then(timerMsg => {
-    estados[userId].mensajeTimerId = timerMsg.message_id;
-    estados[userId].tiempoRestante = 25;
+  const timerMsg = await bot.sendMessage(chatId, `⏳ Tiempo restante: 25 segundos`);
+  estados[userId].mensajeTimerId = timerMsg.message_id;
+  estados[userId].tiempoRestante = 25;
 
-    estados[userId].interval = setInterval(() => {
-      estados[userId].tiempoRestante -= 1;
+  estados[userId].interval = setInterval(() => {
+    estados[userId].tiempoRestante -= 1;
 
-      if (estados[userId].tiempoRestante <= 0) {
-        clearInterval(estados[userId].interval);
-        return;
+    if (estados[userId].tiempoRestante <= 0) {
+      clearInterval(estados[userId].interval);
+      return;
+    }
+
+    bot.editMessageText(
+      `⏳ Tiempo restante: ${estados[userId].tiempoRestante} segundos`,
+      {
+        chat_id: chatId,
+        message_id: estados[userId].mensajeTimerId
       }
+    ).catch(() => {});
+  }, 1000);
 
-      bot.editMessageText(
-        `⏳ Tiempo restante: ${estados[userId].tiempoRestante} segundos`,
-        {
-          chat_id: chatId,
-          message_id: estados[userId].mensajeTimerId
-        }
-      ).catch(() => {});
-    }, 1000);
-  });
+
 
   const opciones = q.opciones.map((op, i) => [{
     text: op,
