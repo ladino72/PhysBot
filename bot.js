@@ -38,6 +38,7 @@ const estados = {}; // Almacena temporales por usuario
 
 const usuariosPath = 'usuarios.json';
 
+
 function cargarUsuarios() {
   if (!fs.existsSync(usuariosPath)) return {};
   return JSON.parse(fs.readFileSync(usuariosPath, 'utf8'));
@@ -219,20 +220,16 @@ function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
 
 // /start
 bot.onText(/\/start/, (msg) => {
-  const chatId = msg.chat.id;
   const userId = msg.from.id.toString();
   const usuarios = cargarUsuarios();
-
-  // Guardar nombre completo si no existe aún
   if (!usuarios[userId]) {
     const nombre = [msg.from.first_name, msg.from.last_name].filter(Boolean).join(' ');
     usuarios[userId] = nombre;
     guardarUsuarios(usuarios);
   }
 
-  sendMateriasMenu(chatId);
+  sendMateriasMenu(msg.chat.id);
 });
-
 
 // Manejador de botones
 bot.on('callback_query', (query) => {
@@ -379,35 +376,46 @@ bot.onText(/\/terminar/, (msg) => {
   bot.sendMessage(userId, '🛑 Has terminado voluntariamente tu quiz.\nPuedes volver a intentarlo cuando lo desees desde /start.');
 });
 
-bot.onText(/\/ranking/, (msg) => {
+
+bot.onText(/\/rankingtema/, (msg) => {
+  const userId = msg.from.id.toString();
   const chatId = msg.chat.id;
+  const estadosUsuario = estados[userId];
+
+  if (!estadosUsuario || !estadosUsuario.materia || !estadosUsuario.tema) {
+    return bot.sendMessage(chatId, '⚠️ Debes estar resolviendo un quiz para usar este comando y ver el ranking de ese tema.');
+  }
+
+  const { materia, tema } = estadosUsuario;
   const puntajes = cargarPuntajes();
   const usuarios = cargarUsuarios();
 
-  const acumulados = [];
+  const ranking = [];
 
-  for (const userId in puntajes) {
-    let total = 0;
-    for (const materia in puntajes[userId]) {
-      for (const tema in puntajes[userId][materia]) {
-        total += puntajes[userId][materia][tema];
-      }
+  for (const id in puntajes) {
+    if (
+      puntajes[id][materia] &&
+      puntajes[id][materia][tema] !== undefined
+    ) {
+      ranking.push({
+        nombre: usuarios[id] || `Usuario ${id}`,
+        puntos: puntajes[id][materia][tema],
+      });
     }
-    const nombre = usuarios[userId] || `Usuario ${userId}`;
-    acumulados.push({ userId, total, nombre });
   }
 
-  if (acumulados.length === 0) {
-    return bot.sendMessage(chatId, '📉 Aún no hay puntajes registrados.');
+  if (ranking.length === 0) {
+    return bot.sendMessage(chatId, `📉 Aún no hay puntajes registrados para el tema *${tema}* de *${materia}*.`, { parse_mode: 'Markdown' });
   }
 
-  const top = acumulados.sort((a, b) => b.total - a.total).slice(0, 10);
+  ranking.sort((a, b) => b.puntos - a.puntos);
 
-  let mensaje = '🏆 *Ranking de Puntajes (Top 10)*\n\n';
-  top.forEach((u, i) => {
-    mensaje += `${i + 1}. ${u.nombre} - ${u.total} punto(s)\n`;
+  let texto = `🏆 *Ranking - ${tema} (${materia})*\n\n`;
+  ranking.forEach((entry, i) => {
+    texto += `${i + 1}. ${entry.nombre} - ${entry.puntos} punto(s)\n`;
   });
 
-  bot.sendMessage(chatId, mensaje, { parse_mode: 'Markdown' });
+  bot.sendMessage(chatId, texto, { parse_mode: 'Markdown' });
 });
+
 
