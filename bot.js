@@ -81,6 +81,10 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
 
   const total = lista.length;
   const q = lista[index];
+  if (index === 0) {
+    bot.sendMessage(chatId, 'ℹ️ Puedes escribir /terminar en cualquier momento para salir del quiz actual voluntariamente y puedes seguir en otro momento');
+  }
+  
 
   if (!estados[userId]) estados[userId] = {};
   estados[userId].materia = materia;
