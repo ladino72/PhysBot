@@ -1,4 +1,3 @@
-Version 3. Funciona OK.
 require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
@@ -237,4 +236,28 @@ bot.on('callback_query', (query) => {
   }
 
   bot.answerCallbackQuery(query.id);
+});
+
+bot.onText(/\/terminar/, (msg) => {
+  const userId = msg.chat.id;
+
+  if (!estados[userId]) {
+    return bot.sendMessage(userId, '⚠️ No estás presentando ningún quiz actualmente.');
+  }
+
+  // Cancelar temporizador de pregunta si existe
+  if (estados[userId].timer) {
+    clearTimeout(estados[userId].timer);
+    delete estados[userId].timer;
+  }
+
+  // Cancelar cronómetro visual
+  if (estados[userId].interval) {
+    clearInterval(estados[userId].interval);
+    delete estados[userId].interval;
+  }
+
+  delete estados[userId];
+
+  bot.sendMessage(userId, '🛑 Has terminado voluntariamente tu quiz.\nPuedes volver a intentarlo cuando lo desees desde /start.');
 });
