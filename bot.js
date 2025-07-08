@@ -378,44 +378,70 @@ bot.onText(/\/terminar/, (msg) => {
 
 
 bot.onText(/\/rankingtema/, (msg) => {
-  const userId = msg.from.id.toString();
   const chatId = msg.chat.id;
-  const estadosUsuario = estados[userId];
-
-  if (!estadosUsuario || !estadosUsuario.materia || !estadosUsuario.tema) {
-    return bot.sendMessage(chatId, '⚠️ Debes estar resolviendo un quiz para usar este comando y ver el ranking de ese tema.');
-  }
-
-  const { materia, tema } = estadosUsuario;
   const puntajes = cargarPuntajes();
   const usuarios = cargarUsuarios();
 
-  const ranking = [];
+  const materias = Object.keys(preguntas);
+  const botones = materias.map(m => [{ text: m, callback_data: `r_materia_${m}` }]);
 
-  for (const id in puntajes) {
-    if (
-      puntajes[id][materia] &&
-      puntajes[id][materia][tema] !== undefined
-    ) {
-      ranking.push({
-        nombre: usuarios[id] || `Usuario ${id}`,
-        puntos: puntajes[id][materia][tema],
-      });
-    }
-  }
-
-  if (ranking.length === 0) {
-    return bot.sendMessage(chatId, `📉 Aún no hay puntajes registrados para el tema *${tema}* de *${materia}*.`, { parse_mode: 'Markdown' });
-  }
-
-  ranking.sort((a, b) => b.puntos - a.puntos);
-
-  let texto = `🏆 *Ranking - ${tema} (${materia})*\n\n`;
-  ranking.forEach((entry, i) => {
-    texto += `${i + 1}. ${entry.nombre} - ${entry.puntos} punto(s)\n`;
+  bot.sendMessage(chatId, '📘 Selecciona una materia para ver su ranking:', {
+    reply_markup: { inline_keyboard: botones }
   });
-
-  bot.sendMessage(chatId, texto, { parse_mode: 'Markdown' });
 });
 
+// Cuando elige una materia, mostrar los temas
+bot.on('callback_query', (query) => {
+  const chatId = query.message.chat.id;
+  const data = query.data;
 
+  if (data.startsWith('r_materia_')) {
+    const materia = data.replace('r_materia_', '');
+    const temas = Object.keys(preguntas[materia]);
+
+    const botones = temas.map(t => [{
+      text: t,
+      callback_data: `r_tema_${materia}_${t}`
+    }]);
+
+    bot.sendMessage(chatId, `📚 Selecciona un tema en *${materia}* para ver el ranking:`, {
+      parse_mode: 'Markdown',
+      reply_markup: { inline_keyboard: botones }
+    });
+  }
+
+  // Mostrar el ranking por materia y tema
+  if (data.startsWith('r_tema_')) {
+    const [, materia, ...rest] = data.split('_');
+    const tema = rest.join('_');
+
+    const puntajes = cargarPuntajes();
+    const usuarios = cargarUsuarios();
+
+    const ranking = [];
+
+    for (const id in puntajes) {
+      if (puntajes[id][materia] && puntajes[id][materia][tema] !== undefined) {
+        ranking.push({
+          nombre: usuarios[id] || `Usuario ${id}`,
+          puntos: puntajes[id][materia][tema],
+        });
+      }
+    }
+
+    if (ranking.length === 0) {
+      return bot.sendMessage(chatId, `📉 Aún no hay puntajes registrados para *${tema}* en *${materia}*.`, { parse_mode: 'Markdown' });
+    }
+
+    ranking.sort((a, b) => b.puntos - a.puntos);
+
+    let texto = `🏆 *Ranking - ${tema} (${materia})*\n\n`;
+    ranking.forEach((entry, i) => {
+      texto += `${i + 1}. ${entry.nombre} — ${entry.puntos} punto(s)\n`;
+    });
+
+    return bot.sendMessage(chatId, texto, { parse_mode: 'Markdown' });
+  }
+
+  bot.answerCallbackQuery(query.id);
+});
