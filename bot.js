@@ -94,6 +94,10 @@ function sendTemasMenu(chatId, materia) {
 
   const total = lista.length;
   const q = lista[index];
+  if (index === 0) {
+    bot.sendMessage(chatId, 'ℹ️ Puedes presionar /terminar en cualquier momento para salir del quiz actual voluntariamente.');
+  }
+  
 
   if (!estados[userId]) estados[userId] = {};
   estados[userId].materia = materia;
