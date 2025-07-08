@@ -60,11 +60,21 @@ function sendMateriasMenu(chatId) {
 // Menú de temas
 function sendTemasMenu(chatId, materia) {
   const temas = Object.keys(preguntas[materia]);
+
   const botones = temas.map(t => [{
     text: t,
     callback_data: `tema_${materia}_${t}`
   }]);
-  botones.push([{ text: '⏪ Volver a materias', callback_data: 'volver_materias' }]);
+
+  // Agregamos ambas funciones
+  botones.push([
+    { text: '📊 Ver mi nota', callback_data: `ver_mi_nota_${materia}` },
+    { text: '📈 Ranking', callback_data: `ranking_${materia}` }
+  ]);
+
+  botones.push([
+    { text: '⏪ Volver a materias', callback_data: 'volver_materias' }
+  ]);
 
   bot.sendMessage(chatId, `📚 Temas de *${materia}*:`, {
     parse_mode: 'Markdown',
@@ -72,8 +82,10 @@ function sendTemasMenu(chatId, materia) {
   });
 }
 
+
+
 // Mostrar pregunta
-  async function sendPregunta(chatId, materia, tema, index = 0, userId) {
+ async function sendPregunta(chatId, materia, tema, index = 0, userId) {
 
   const lista = preguntas[materia][tema];
   if (!lista || !lista[index]) {
@@ -82,10 +94,6 @@ function sendTemasMenu(chatId, materia) {
 
   const total = lista.length;
   const q = lista[index];
-  if (index === 0) {
-    bot.sendMessage(chatId, 'ℹ️ Puedes escribir /terminar en cualquier momento para salir del quiz actual voluntariamente.');
-  }
-  
 
   if (!estados[userId]) estados[userId] = {};
   estados[userId].materia = materia;
@@ -106,28 +114,28 @@ function sendTemasMenu(chatId, materia) {
   }, 25000);
 
   // 🕒 Mostrar cronómetro y actualizarlo cada segundo
-  const timerMsg = await bot.sendMessage(chatId, `⏳ Tiempo restante: 25 segundos`);
-  estados[userId].mensajeTimerId = timerMsg.message_id;
-  estados[userId].tiempoRestante = 25;
-
-  estados[userId].interval = setInterval(() => {
-    estados[userId].tiempoRestante -= 1;
-
-    if (estados[userId].tiempoRestante <= 0) {
-      clearInterval(estados[userId].interval);
-      return;
-    }
-
-    bot.editMessageText(
-      `⏳ Tiempo restante: ${estados[userId].tiempoRestante} segundos`,
-      {
-        chat_id: chatId,
-        message_id: estados[userId].mensajeTimerId
+    // 🕒 Mostrar cronómetro y actualizarlo cada segundo
+    const timerMsg = await bot.sendMessage(chatId, `⏳ Tiempo restante: 25 segundos`);
+    estados[userId].mensajeTimerId = timerMsg.message_id;
+    estados[userId].tiempoRestante = 25;
+  
+    estados[userId].interval = setInterval(() => {
+      estados[userId].tiempoRestante -= 1;
+  
+      if (estados[userId].tiempoRestante <= 0) {
+        clearInterval(estados[userId].interval);
+        return;
       }
-    ).catch(() => {});
-  }, 1000);
-
-
+  
+      bot.editMessageText(
+        `⏳ Tiempo restante: ${estados[userId].tiempoRestante} segundos`,
+        {
+          chat_id: chatId,
+          message_id: estados[userId].mensajeTimerId
+        }
+      ).catch(() => {});
+    }, 1000);
+  
 
   const opciones = q.opciones.map((op, i) => [{
     text: op,
@@ -240,6 +248,81 @@ bot.on('callback_query', (query) => {
     const opcion = parseInt(opcionStr);
     procesarRespuesta(chatId, userId, materia, tema, index, opcion);
   }
+
+  if (data.startsWith('ver_mi_nota_')) {
+    const materia = data.split('_').slice(3).join('_');
+    const puntajes = cargarPuntajes();
+    const userData = puntajes[userId];
+  
+    if (!userData || !userData[materia]) {
+      return bot.sendMessage(chatId, `ℹ️ Aún no has respondido ningún tema en *${materia}*.`, {
+        parse_mode: 'Markdown'
+      });
+    }
+  
+    let resumen = `📊 *Tu Puntaje en ${materia}:*\n\n`;
+    for (const tema in userData[materia]) {
+      const puntos = userData[materia][tema];
+      resumen += `   • ${tema}: ${puntos} punto(s)\n`;
+    }
+  
+    return bot.sendMessage(chatId, resumen, { parse_mode: 'Markdown' });
+  }
+  
+
+  if (data.startsWith('ranking_')) {
+    const materia = data.split('_')[1];
+  
+    const temasDisponibles = Object.keys(preguntas[materia]);
+  
+    // Menú para elegir tema dentro del ranking
+    const botonesTemas = temasDisponibles.map(t => [{
+      text: t,
+      callback_data: `rankingtema_${materia}_${t}`
+    }]);
+  
+    botonesTemas.push([{ text: '⏪ Volver a Temas', callback_data: `materia_${materia}` }]);
+  
+    return bot.sendMessage(chatId, `📈 Elige un tema de *${materia}* para ver el ranking:`, {
+      parse_mode: 'Markdown',
+      reply_markup: { inline_keyboard: botonesTemas }
+    });
+  }
+
+  if (data.startsWith('rankingtema_')) {
+    const [, materia, tema] = data.split('_');
+    const puntajes = cargarPuntajes();
+  
+    const ranking = [];
+  
+    for (const userId in puntajes) {
+      const user = puntajes[userId];
+      const puntos = user[materia]?.[tema] ?? 0;
+      if (puntos > 0) {
+        ranking.push({ userId, puntos });
+      }
+    }
+  
+    if (ranking.length === 0) {
+      return bot.sendMessage(chatId, `📉 Aún no hay puntajes registrados para *${tema}* de *${materia}*.`, {
+        parse_mode: 'Markdown'
+      });
+    }
+  
+    // Ordenar de mayor a menor
+    ranking.sort((a, b) => b.puntos - a.puntos);
+  
+    // Mostrar top
+    let mensaje = `🏆 *Ranking: ${materia} / ${tema}*\n\n`;
+    ranking.forEach((entry, index) => {
+      const posicion = index + 1;
+      const nombre = entry.userId; // Podrías guardar nombres más adelante
+      mensaje += `${posicion}. Usuario ${nombre} — ${entry.puntos} punto(s)\n`;
+    });
+  
+    return bot.sendMessage(chatId, mensaje, { parse_mode: 'Markdown' });
+  }
+  
 
   bot.answerCallbackQuery(query.id);
 });
