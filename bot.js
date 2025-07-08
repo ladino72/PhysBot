@@ -36,6 +36,18 @@ const preguntas = JSON.parse(fs.readFileSync('preguntas.json', 'utf8'));
 const puntajesPath = 'puntajes.json';
 const estados = {}; // Almacena temporales por usuario
 
+const usuariosPath = 'usuarios.json';
+
+function cargarUsuarios() {
+  if (!fs.existsSync(usuariosPath)) return {};
+  return JSON.parse(fs.readFileSync(usuariosPath, 'utf8'));
+}
+
+function guardarUsuarios(usuarios) {
+  fs.writeFileSync(usuariosPath, JSON.stringify(usuarios, null, 2));
+}
+
+
 function cargarPuntajes() {
   if (!fs.existsSync(puntajesPath)) return {};
   return JSON.parse(fs.readFileSync(puntajesPath, 'utf8'));
@@ -95,7 +107,7 @@ function sendTemasMenu(chatId, materia) {
   const total = lista.length;
   const q = lista[index];
   if (index === 0) {
-    bot.sendMessage(chatId, 'ℹ️ Puedes presionar /terminar en cualquier momento para salir del quiz actual voluntariamente.');
+    bot.sendMessage(chatId, 'ℹ️ Puedes escribir /terminar en cualquier momento para salir del quiz actual voluntariamente.');
   }
   
 
@@ -207,8 +219,20 @@ function procesarRespuesta(chatId, userId, materia, tema, index, opcion) {
 
 // /start
 bot.onText(/\/start/, (msg) => {
-  sendMateriasMenu(msg.chat.id);
+  const chatId = msg.chat.id;
+  const userId = msg.from.id.toString();
+  const usuarios = cargarUsuarios();
+
+  // Guardar nombre completo si no existe aún
+  if (!usuarios[userId]) {
+    const nombre = [msg.from.first_name, msg.from.last_name].filter(Boolean).join(' ');
+    usuarios[userId] = nombre;
+    guardarUsuarios(usuarios);
+  }
+
+  sendMateriasMenu(chatId);
 });
+
 
 // Manejador de botones
 bot.on('callback_query', (query) => {
@@ -354,3 +378,36 @@ bot.onText(/\/terminar/, (msg) => {
 
   bot.sendMessage(userId, '🛑 Has terminado voluntariamente tu quiz.\nPuedes volver a intentarlo cuando lo desees desde /start.');
 });
+
+bot.onText(/\/ranking/, (msg) => {
+  const chatId = msg.chat.id;
+  const puntajes = cargarPuntajes();
+  const usuarios = cargarUsuarios();
+
+  const acumulados = [];
+
+  for (const userId in puntajes) {
+    let total = 0;
+    for (const materia in puntajes[userId]) {
+      for (const tema in puntajes[userId][materia]) {
+        total += puntajes[userId][materia][tema];
+      }
+    }
+    const nombre = usuarios[userId] || `Usuario ${userId}`;
+    acumulados.push({ userId, total, nombre });
+  }
+
+  if (acumulados.length === 0) {
+    return bot.sendMessage(chatId, '📉 Aún no hay puntajes registrados.');
+  }
+
+  const top = acumulados.sort((a, b) => b.total - a.total).slice(0, 10);
+
+  let mensaje = '🏆 *Ranking de Puntajes (Top 10)*\n\n';
+  top.forEach((u, i) => {
+    mensaje += `${i + 1}. ${u.nombre} - ${u.total} punto(s)\n`;
+  });
+
+  bot.sendMessage(chatId, mensaje, { parse_mode: 'Markdown' });
+});
+
