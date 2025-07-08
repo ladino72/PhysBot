@@ -93,6 +93,9 @@ function sendPregunta(chatId, materia, tema, index = 0, userId) {
 
   const total = lista.length;
   const q = lista[index];
+  if (index === 0) {
+    bot.sendMessage(chatId, 'ℹ️ Puedes escribir /terminar en cualquier momento para salir del quiz actual voluntariamente.');
+  }
 
   if (!estados[userId]) estados[userId] = {};
   estados[userId].materia = materia;
@@ -204,6 +207,32 @@ bot.onText(/\/start/, (msg) => {
   sendMateriasMenu(msg.chat.id);
 });
 
+bot.onText(/\/terminar/, (msg) => {
+  const userId = msg.chat.id;
+
+  if (!estados[userId]) {
+    return bot.sendMessage(userId, '⚠️ No estás presentando ningún quiz actualmente.');
+  }
+
+  // Cancelar temporizador de pregunta si existe
+  if (estados[userId].timer) {
+    clearTimeout(estados[userId].timer);
+    delete estados[userId].timer;
+  }
+
+  // Cancelar cronómetro visual
+  if (estados[userId].interval) {
+    clearInterval(estados[userId].interval);
+    delete estados[userId].interval;
+  }
+
+  delete estados[userId];
+
+  bot.sendMessage(userId, '🛑 Has terminado voluntariamente tu quiz.\nPuedes volver a intentarlo cuando lo desees desde /start.');
+});
+
+
+
 // Manejador de botones
 bot.on('callback_query', (query) => {
   const chatId = query.message.chat.id;
@@ -290,6 +319,7 @@ bot.on('callback_query', (query) => {
   if (data.startsWith('rankingtema_')) {
     const [, materia, tema] = data.split('_');
     const puntajes = cargarPuntajes();
+    const usuarios = cargarUsuarios(); // <- AÑADIR ESTO
   
     const ranking = [];
   
@@ -297,7 +327,10 @@ bot.on('callback_query', (query) => {
       const user = puntajes[userId];
       const puntos = user[materia]?.[tema] ?? 0;
       if (puntos > 0) {
-        ranking.push({ userId, puntos });
+        ranking.push({
+          nombre: usuarios[userId] || `Usuario ${userId}`,
+          puntos
+        });
       }
     }
   
@@ -307,19 +340,16 @@ bot.on('callback_query', (query) => {
       });
     }
   
-    // Ordenar de mayor a menor
     ranking.sort((a, b) => b.puntos - a.puntos);
   
-    // Mostrar top
     let mensaje = `🏆 *Ranking: ${materia} / ${tema}*\n\n`;
     ranking.forEach((entry, index) => {
-      const posicion = index + 1;
-      const nombre = entry.userId; // Podrías guardar nombres más adelante
-      mensaje += `${posicion}. Usuario ${nombre} — ${entry.puntos} punto(s)\n`;
+      mensaje += `${index + 1}. ${entry.nombre} — ${entry.puntos} punto(s)\n`;
     });
   
     return bot.sendMessage(chatId, mensaje, { parse_mode: 'Markdown' });
   }
+  
   
 
   bot.answerCallbackQuery(query.id);
