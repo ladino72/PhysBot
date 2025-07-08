@@ -234,6 +234,7 @@ bot.onText(/\/terminar/, (msg) => {
 
 
 // Manejador de botones
+// Manejador de botones
 bot.on('callback_query', (query) => {
   const chatId = query.message.chat.id;
   const userId = query.from.id.toString();
@@ -276,82 +277,29 @@ bot.on('callback_query', (query) => {
     procesarRespuesta(chatId, userId, materia, tema, index, opcion);
   }
 
-  if (data.startsWith('ver_mi_nota_')) {
-    const materia = data.split('_').slice(3).join('_');
-    const puntajes = cargarPuntajes();
-    const userData = puntajes[userId];
-  
-    if (!userData || !userData[materia]) {
-      return bot.sendMessage(chatId, `ℹ️ Aún no has respondido ningún tema en *${materia}*.`, {
-        parse_mode: 'Markdown'
-      });
-    }
-  
-    let resumen = `📊 *Tu Puntaje en ${materia}:*\n\n`;
-    for (const tema in userData[materia]) {
-      const puntos = userData[materia][tema];
-      resumen += `   • ${tema}: ${puntos} punto(s)\n`;
-    }
-  
-    return bot.sendMessage(chatId, resumen, { parse_mode: 'Markdown' });
-  }
-  
-
-  if (data.startsWith('ranking_')) {
-    const materia = data.split('_')[1];
-  
-    const temasDisponibles = Object.keys(preguntas[materia]);
-  
-    // Menú para elegir tema dentro del ranking
-    const botonesTemas = temasDisponibles.map(t => [{
-      text: t,
-      callback_data: `rankingtema_${materia}_${t}`
-    }]);
-  
-    botonesTemas.push([{ text: '⏪ Volver a Temas', callback_data: `materia_${materia}` }]);
-  
-    return bot.sendMessage(chatId, `📈 Elige un tema de *${materia}* para ver el ranking:`, {
-      parse_mode: 'Markdown',
-      reply_markup: { inline_keyboard: botonesTemas }
-    });
-  }
-
-  if (data.startsWith('rankingtema_')) {
-    const [, materia, tema] = data.split('_');
-    const puntajes = cargarPuntajes();
-    const usuarios = cargarUsuarios(); // <- AÑADIR ESTO
-  
-    const ranking = [];
-  
-    for (const userId in puntajes) {
-      const user = puntajes[userId];
-      const puntos = user[materia]?.[tema] ?? 0;
-      if (puntos > 0) {
-        ranking.push({
-          nombre: usuarios[userId] || `Usuario ${userId}`,
-          puntos
-        });
-      }
-    }
-  
-    if (ranking.length === 0) {
-      return bot.sendMessage(chatId, `📉 Aún no hay puntajes registrados para *${tema}* de *${materia}*.`, {
-        parse_mode: 'Markdown'
-      });
-    }
-  
-    ranking.sort((a, b) => b.puntos - a.puntos);
-  
-    let mensaje = `🏆 *Ranking: ${materia} / ${tema}*\n\n`;
-    ranking.forEach((entry, index) => {
-      mensaje += `${index + 1}. ${entry.nombre} — ${entry.puntos} punto(s)\n`;
-    });
-  
-    return bot.sendMessage(chatId, mensaje, { parse_mode: 'Markdown' });
-  }
-  
-  
-  
-
   bot.answerCallbackQuery(query.id);
+});
+
+bot.onText(/\/terminar/, (msg) => {
+  const userId = msg.chat.id;
+
+  if (!estados[userId]) {
+    return bot.sendMessage(userId, '⚠️ No estás presentando ningún quiz actualmente.');
+  }
+
+  // Cancelar temporizador de pregunta si existe
+  if (estados[userId].timer) {
+    clearTimeout(estados[userId].timer);
+    delete estados[userId].timer;
+  }
+
+  // Cancelar cronómetro visual
+  if (estados[userId].interval) {
+    clearInterval(estados[userId].interval);
+    delete estados[userId].interval;
+  }
+
+  delete estados[userId];
+
+  bot.sendMessage(userId, '🛑 Has terminado voluntariamente tu quiz.\nPuedes volver a intentarlo cuando lo desees desde /start.');
 });
